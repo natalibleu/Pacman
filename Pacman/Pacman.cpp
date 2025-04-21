@@ -48,23 +48,13 @@ void Pacman::EatEnergizer(sf::Vector2f p)
     maze[indexes.x][indexes.y] = ' ';
     currentScore++;
 
-    timer.FrightenedTimer(7.f);
-
-    if (timer.IsFrightenedOn())
-    {
-        std::cout << "Timer: " << timer.FrightenedTimeLeft() << std::endl;
-    }
-
-    // set the ghosts into frightened mode
 }
 
 bool Pacman::HasEatenEnergizer(sf::Vector2f p)
 {
     sf::Vector2i indexes = ConvertCoordinates(p);
 
-    maze[indexes.x][indexes.y] == 'o';
-
-    return true;
+    return maze[indexes.x][indexes.y] == 'o';
 }
 
 void Pacman::EatGhost()
