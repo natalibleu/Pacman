@@ -1,6 +1,7 @@
 #include "Ghosts.h"
 #include "Constants.h"
 #include "Map.h"
+#include <iostream>
 
 sf::Vector2f WrapCoords2(const sf::Vector2f& p)
 {
@@ -29,38 +30,72 @@ bool CanMoveTo(sf::Vector2f p)
     return maze[indexes.x][indexes.y] != '#';
 }
 
-sf::Vector2f GetNextTile(RandomDirection dir)
+sf::Vector2f GetNextTile(Direction dir)
 {
     switch (dir)
     {
-    case RandomDirection::None:
+    case Direction::None:
         return { 0, 0 };
-    case RandomDirection::Up:
+    case Direction::Up:
         return { 0, -32 };
-    case RandomDirection::Down:
+    case Direction::Down:
         return { 0, 32 };
-    case RandomDirection::Left:
+    case Direction::Left:
         return { -32, 0 };
-    case RandomDirection::Right:
+    case Direction::Right:
         return { 32, 0 };
     }
 
     return { 0, 0 };
 }
 
-Ghosts::Ghosts(const std::string& texturePath, char a) : ghostTexture(texturePath), ghostSprite(ghostTexture, sf::IntRect{ { 0,0, },{ 32, 32} })
+void Ghosts::setMode(GhostMode newMode) 
 {
-    MapSearch(a, ghostSprite);
+    // Save current mode if switching to Frightened
+    if (newMode == GhostMode::Frightened && mode != GhostMode::Frightened) {
+        prevMode = mode;
+    }
+    mode = newMode;
 }
 
-RandomDirection Ghosts::OppositeDirection() //this returns the opposite of the last direction that I have been in
+void Ghosts::Update()
 {
-    switch (currentMoveDirection) {
-    case RandomDirection::Up: return RandomDirection::Down;
-    case RandomDirection::Down: return RandomDirection::Up;
-    case RandomDirection::Left: return RandomDirection::Right;
-    case RandomDirection::Right: return RandomDirection::Left;
-    default: return RandomDirection::None;
+    switch (mode)
+    {
+    case GhostMode::Scatter:
+        break;
+    case GhostMode::Chase:
+        break;
+    //case GhostMode::Frightened:
+    //    ghostSprite = frightenedSprite;
+    //    break;
+    }
+}
+
+//void Ghosts::PacmanEatsEnergizer(std::vector<Ghosts>& ghosts, Timers& frightenedTimer, float frightenedDuration, Pacman& pacman) 
+//{
+//    frightenedTimer.FrightenedTimer(frightenedDuration);
+//
+//    for (auto& ghost : ghosts) 
+//    {
+//        ghost.setMode(GhostMode::Frightened);
+//    }
+//
+//    std::cout << "Ghosts are frightened!" << std::endl;
+//
+//    if (pacman.hasEatenEnergizer) {
+//        PacmanEatsEnergizer(ghosts, frightenedTimer, 7.f); // 7 seconds of frightened mode
+//    }
+//}
+
+Direction Ghosts::OppositeDirection(Direction dir) //this returns the opposite of the last direction that I have been in
+{
+    switch (dir) {
+    case Direction::Up: return Direction::Down;
+    case Direction::Down: return Direction::Up;
+    case Direction::Left: return Direction::Right;
+    case Direction::Right: return Direction::Left;
+    default: return Direction::None;
     }
 }
 
@@ -80,17 +115,17 @@ bool Ghosts::MoveTo(float deltaTime)
 void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos) 
 {
 
-    sf::Vector2f targetPosition = getTargetPosition(pacmanPos, ghostPos);
+    sf::Vector2f targetPosition = getTargetPosition(pacmanPos);
 
     if (MoveTo(deltaTime)) {
         currentTile = WrapCoords2(nextTile);
 
         //choosing direction toward Pacman
         float bestDist = std::numeric_limits<float>::max();
-        RandomDirection bestDir = RandomDirection::None;
-        for (auto dir : { RandomDirection::Up, RandomDirection::Down, RandomDirection::Left, RandomDirection::Right }) {
+        Direction bestDir = Direction::None;
+        for (auto dir : { Direction::Up, Direction::Down, Direction::Left, Direction::Right }) {
             sf::Vector2f next = currentTile + GetNextTile(dir);
-            if (CanMoveTo(next) && dir != OppositeDirection()) {
+            if (CanMoveTo(next) && dir != OppositeDirection(currentMoveDirection)) {
                 float dist = std::abs(next.x - targetPosition.x) + std::abs(next.y - targetPosition.y);
                 if (dist < bestDist) {
                     bestDist = dist;
@@ -99,13 +134,18 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
             }
         }
 
-        if (bestDir != RandomDirection::None) {
+        if (mode == GhostMode::Frightened) {
+
+            bestDir = OppositeDirection(bestDir);
+        }
+
+        if (bestDir != Direction::None) {
             nextTile = currentTile + GetNextTile(bestDir);
             currentMoveDirection = bestDir;
         }
         else {
             nextTile = currentTile; // Stay put
-            currentMoveDirection = RandomDirection::None;
+            currentMoveDirection = Direction::None;
         }
 
         interpolationTime = std::abs(nextTile.x - currentTile.x) + std::abs(nextTile.y - currentTile.y) > 0
@@ -147,4 +187,13 @@ sf::Vector2f Ghosts::getPosition() const
 bool Ghosts::Scatter()
 {
     return false;
+}
+
+Ghosts::Ghosts(const std::string& texturePath, char a)
+    : ghostTexture(texturePath), 
+    ghostSprite(ghostTexture, sf::IntRect{ { 0,0, },{ 32, 32} })
+  /*  frightenedTexture("assets/frightened.png"), 
+    frightenedSprite(frightenedTexture)*/
+{
+    MapSearch(a, ghostSprite);
 }

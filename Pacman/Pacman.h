@@ -43,7 +43,9 @@ private:
 
 public:
     void EatFruits(sf::Vector2f p);
-    bool HasEatenFruit(sf::Vector2f tile);
+    bool HasEatenFruit(sf::Vector2f p);
+    void EatEnergizer(sf::Vector2f p);
+    bool HasEatenEnergizer(sf::Vector2f p);
     void EatGhost();
     void Move(float deltaTime);
     sf::Vector2f GetPosition();

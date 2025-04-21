@@ -51,6 +51,9 @@
     <ClCompile Include="Clyde.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Timers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ghosts.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Clyde.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

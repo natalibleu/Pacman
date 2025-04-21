@@ -2,6 +2,8 @@
 #include "Map.h"
 #include "Constants.h"
 #include "Score.h"
+#include "Timers.h"
+#include <iostream>
 
 sf::Vector2f WrapCoords(const sf::Vector2f& p)
 {
@@ -35,6 +37,34 @@ bool Pacman::HasEatenFruit(sf::Vector2f p)
     sf::Vector2i indexes = ConvertCoordinates(p);
 
     return maze[indexes.x][indexes.y] == '.';
+}
+
+void Pacman::EatEnergizer(sf::Vector2f p)
+{
+    Timers timer;
+
+    sf::Vector2i indexes = ConvertCoordinates(p);
+
+    maze[indexes.x][indexes.y] = ' ';
+    currentScore++;
+
+    timer.FrightenedTimer(7.f);
+
+    if (timer.IsFrightenedOn())
+    {
+        std::cout << "Timer: " << timer.FrightenedTimeLeft() << std::endl;
+    }
+
+    // set the ghosts into frightened mode
+}
+
+bool Pacman::HasEatenEnergizer(sf::Vector2f p)
+{
+    sf::Vector2i indexes = ConvertCoordinates(p);
+
+    maze[indexes.x][indexes.y] == 'o';
+
+    return true;
 }
 
 void Pacman::EatGhost()
@@ -152,6 +182,11 @@ void Pacman::Move(float deltaTime)
         currentTile = WrapCoords(nextTile);
 
         if (HasEatenFruit(currentTile))
+        {
+            EatFruits(currentTile);
+        }
+
+        if (HasEatenEnergizer(currentTile))
         {
             EatFruits(currentTile);
         }

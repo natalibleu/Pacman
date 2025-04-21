@@ -7,7 +7,11 @@ Blinky::Blinky() : Ghosts("assets/blinky1.png", '0')
 
 }
 
-sf::Vector2f Blinky::getTargetPosition(const sf::Vector2f& pacmanPos, const sf::Vector2f& pos2) const
+sf::Vector2f Blinky::getTargetPosition(const sf::Vector2f& pacmanPos)
 {
+	if (mode == GhostMode::Scatter)
+	{
+		return sf::Vector2f{ 0.f, 0.f };
+	}
 	return pacmanPos;
 }

@@ -45,10 +45,10 @@ int main()
 
         //implementing functions
         pacman.Move(elapsedTime.asSeconds());
-        blinky.Move(elapsedTime.asSeconds(), blinky.getTargetPosition(pacman.GetPosition(),));
-        pinky.Move(elapsedTime.asSeconds(), pinky.getTargetPosition(pacman.GetPosition(),));
-        clyde.Move(elapsedTime.asSeconds(), clyde.getTargetPosition(pacman.GetPosition(), blinky));
-        //inky.Move(elapsedTime.asSeconds(), inky.setTargetPosition(pacman.GetPosition()),);
+        blinky.Move(elapsedTime.asSeconds(), blinky.getTargetPosition(pacman.GetPosition()));
+        pinky.Move(elapsedTime.asSeconds(), pinky.getTargetPosition(pacman.GetPosition()));
+        clyde.Move(elapsedTime.asSeconds(), clyde.getTargetPosition(pacman.GetPosition()));
+        inky.Move(elapsedTime.asSeconds(), inky.getTargetPosition(pacman.GetPosition()));
         window.clear();
         map.DrawMap(0, 0, window);
         pellet.DrawPellets(window);

@@ -4,9 +4,10 @@
 class Inky : public Ghosts
 {
 private: 
+	bool localScatterMode = false;
 
 public:
-	sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos, const sf::Vector2f& pos2) const override; //overriding
+	sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) override; //overriding
 	bool Scatter();
 	Inky();
 };

@@ -3,13 +3,22 @@
 #include "Constants.h"
 #include "Blinky.h"
 
-sf::Vector2f Clyde::getTargetPosition(const sf::Vector2f& pacmanPos, const sf::Vector2f& pos2) const
+void Clyde::GetBlinkyPos(sf::Vector2f newBlinkyPos)
 {
+    blinkyPos = newBlinkyPos;
+}
+
+sf::Vector2f Clyde::getTargetPosition(const sf::Vector2f& pacmanPos)
+{
+    if (mode == GhostMode::Scatter)
+    {
+        return sf::Vector2f{ 0.f, static_cast<float>(screenHeight) };
+    }
+
     //Clyde targeting 2 blocks ahead of Pacman
-    sf::Vector2f clydeTarget = pacman + sf::Vector2f(static_cast<float>(2 * blockSize), 0.f);
+    sf::Vector2f clydeTarget = pacmanPos + sf::Vector2f(static_cast<float>(2 * blockSize), 0.f);
 
     //getting vector from Blinky's position to Clyde's target
-    sf::Vector2f blinkyPos = blinky.ghostSprite.getPosition();
     sf::Vector2f vectorToTarget = clydeTarget - blinkyPos;
 
     //doubling the vector.
