@@ -50,24 +50,20 @@ protected:
 	sf::Texture ghostTexture;
 	sf::Sprite ghostSprite;
 
-	float frightenedTime = 7.0f;
-	float frightenedTimer = 0.f;
+	sf::Texture defaultTexture;
 
 	GhostMode mode = GhostMode::Chase;
-	GhostMode prevMode = GhostMode::Chase;
+	Timers modeTimer;
 
 	Ghosts(const std::string& texturePath, char a);
 
 public:
 	Direction OppositeDirection(Direction dir);
-	void Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos = {0.f, 0.f});
+	void Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos = { 0.f, 0.f });
 	bool MoveTo(float deltaTime);
 	void MapSearch(char a, sf::Sprite& sprite);
 	void Draw(sf::RenderWindow& window);
 	virtual sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) = 0;
 	sf::Vector2f getPosition() const;
 	void setMode(GhostMode newMode);
-	void Update();
-	bool Scatter();
 };
-

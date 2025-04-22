@@ -20,7 +20,7 @@ int main()
 
     //speed of pacman
     //window.setFramerateLimit(200);
-    
+
     //making the objects
     Map map;
     Score score;
@@ -31,6 +31,8 @@ int main()
     Pinky pinky;
     Inky inky;
     Clyde clyde;
+
+    pacman.SetGhosts(blinky, pinky, inky, clyde);
 
     //keeping the window on
     while (window.isOpen())

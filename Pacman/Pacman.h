@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Ghosts.h"
 
 enum class MoveDirection
 {
@@ -35,6 +36,8 @@ private:
     float animationEndTime = 0.1f; // seconds per frame
     int currentFrame = 0;
 
+    Ghosts* ghosts[4];
+
     void UpdateAnimation(float deltaTime);
 
     // Move pacman towards the next tile.
@@ -42,6 +45,7 @@ private:
     bool MoveTo(float deltaTime);
 
 public:
+    void SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
     void EatFruits(sf::Vector2f p);
     bool HasEatenFruit(sf::Vector2f p);
     void EatEnergizer(sf::Vector2f p);
@@ -53,4 +57,3 @@ public:
     void Die();
     Pacman();
 };
-

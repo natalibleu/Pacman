@@ -24,6 +24,14 @@ sf::Vector2i ConvertCoordinates(sf::Vector2f p)
     return sf::Vector2i{ r,c };
 }
 
+void Pacman::SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde)
+{
+    ghosts[0] = &blinky;
+    ghosts[1] = &pinky;
+    ghosts[2] = &inky;
+    ghosts[3] = &clyde;
+}
+
 void Pacman::EatFruits(sf::Vector2f p)
 {
     sf::Vector2i indexes = ConvertCoordinates(p);
@@ -41,13 +49,16 @@ bool Pacman::HasEatenFruit(sf::Vector2f p)
 
 void Pacman::EatEnergizer(sf::Vector2f p)
 {
-    Timers timer;
-
     sf::Vector2i indexes = ConvertCoordinates(p);
 
     maze[indexes.x][indexes.y] = ' ';
     currentScore++;
 
+
+    for (int i = 0; i < 4; i++) 
+    {
+        ghosts[i]->setMode(GhostMode::Frightened);
+    }
 }
 
 bool Pacman::HasEatenEnergizer(sf::Vector2f p)
@@ -178,7 +189,7 @@ void Pacman::Move(float deltaTime)
 
         if (HasEatenEnergizer(currentTile))
         {
-            EatFruits(currentTile);
+            EatEnergizer(currentTile);
         }
 
         // if we can go to the nextMoveDirection we go there

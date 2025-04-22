@@ -6,15 +6,15 @@ class Timers
 private:
 	sf::Clock clock;
 	float duration = 0.f;
+	float timeLeft = 0.f;
 	bool running = false;
 
 public:
-	Timers();
-	void ScatterTimer(float seconds);
-	void FrightenedTimer(float seconds);
-	bool IsScatterOn() const { return running; } 
-	bool IsFrightenedOn() const { return running; }
-	float ScatterTimeLeft() const;
-	float FrightenedTimeLeft() const;
+	Timers(float _duration);
+	void SetDuration(float _duration);
+	void Start();
+	void Update(float deltaTime);
+	float Time();
+
 };
 

@@ -1,27 +1,30 @@
 #include "Timers.h"
 
-Timers::Timers()
+Timers::Timers(float _duration)
 {
+	duration = _duration;
 }
 
-void Timers::ScatterTimer(float seconds)
+void Timers::SetDuration(float _duration)
 {
-    duration = seconds;
-    clock.restart();
-    running = true;
+	duration = _duration;
 }
 
-void Timers::FrightenedTimer(float seconds)
+// Resets the timer and starts it
+void Timers::Start()
 {
-    duration = seconds;
-    clock.restart();
-    running = true;
+	timeLeft = duration;
+	running = true;
 }
 
-float Timers::ScatterTimeLeft() const {
-    return std::max(0.f, duration - clock.getElapsedTime().asSeconds());
+// Updates the timer by passed time (deltaTime)
+void Timers::Update(float deltaTime)
+{
+	timeLeft -= deltaTime;
 }
 
-float Timers::FrightenedTimeLeft() const {
-    return std::max(0.f, duration - clock.getElapsedTime().asSeconds());
+// Returns the time left
+float Timers::Time()
+{
+	return timeLeft;
 }
