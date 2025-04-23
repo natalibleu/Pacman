@@ -24,6 +24,7 @@ sf::Vector2i ConvertCoordinates(sf::Vector2f p)
     return sf::Vector2i{ r,c };
 }
 
+
 void Pacman::SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde)
 {
     ghosts[0] = &blinky;
@@ -58,6 +59,7 @@ void Pacman::EatEnergizer(sf::Vector2f p)
     for (int i = 0; i < 4; i++) 
     {
         ghosts[i]->setMode(GhostMode::Frightened);
+
     }
 }
 
@@ -68,10 +70,33 @@ bool Pacman::HasEatenEnergizer(sf::Vector2f p)
     return maze[indexes.x][indexes.y] == 'o';
 }
 
-void Pacman::EatGhost()
+bool Pacman::HasEatenGhost(sf::Vector2f p)
 {
-    //insert collision with ghosts only during booster
+    sf::Vector2i indexes = ConvertCoordinates(p); // Tile position of p
+    for (const auto& ghost : ghosts) { // Assuming ghosts is a std::vector<Ghosts>
+        // Get ghost's runtime pixel position and convert to tile position
+        sf::Vector2f ghostPos = ghost->GetPosition();
+        sf::Vector2i ghostTile = ConvertCoordinates(ghostPos);
+        if (ghostTile == indexes) {
+            return true; // Ghost is at this tile
+        }
+    }
+    return false;
 }
+
+void Pacman::EatGhost(sf::Vector2f p)
+{
+    sf::Vector2i indexes = ConvertCoordinates(p);
+    for (auto& ghost : ghosts) 
+    {
+        sf::Vector2i ghostTile = ConvertCoordinates(ghost->GetPosition());
+        if (ghostTile == indexes && ghost->GetMode() == GhostMode::Frightened) 
+        {
+            currentScore += 200;
+        }
+    }
+}
+
 
 void Pacman::DrawPacman(sf::RenderWindow& window) //self explanatory
 {
@@ -190,6 +215,17 @@ void Pacman::Move(float deltaTime)
         if (HasEatenEnergizer(currentTile))
         {
             EatEnergizer(currentTile);
+        }
+
+        if (HasEatenGhost(currentTile))
+        {
+            for (auto& ghost : ghosts)
+            {
+                if (ghost->GetPosition() == currentTile && ghost->GetMode() == GhostMode::Frightened)
+                {
+                    EatGhost(currentTile);
+                }
+            }
         }
 
         // if we can go to the nextMoveDirection we go there

@@ -3,8 +3,8 @@
 #include "Map.h"
 #include <SFML/Graphics.hpp>
 
-char maze[rows][columns] = { // P is Pacman's spawn point; 123 is each ghousts spawn point, 1 is for , 2 is for , 3 is for 
-	" ################### ", //each o is for the boosters and each . is for the fruits, = is the door, 0 is the exit for the ghosts
+char maze[rows][columns] = { // P is Pacman's spawn point; 123 is each ghosts spawn point, 1 is for , 2 is for , 3 is for 
+	" ################### ", //each o is for the boosters and each . is for the fruits, = is the door,
 	" #........#........# ",
 	" #o##.###.#.###.##o# ",
 	" #.................# ",

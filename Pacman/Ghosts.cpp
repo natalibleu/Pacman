@@ -69,24 +69,6 @@ void Ghosts::setMode(GhostMode newMode)
     }
 }
 
-
-
-//void Ghosts::PacmanEatsEnergizer(std::vector<Ghosts>& ghosts, Timers& frightenedTimer, float frightenedDuration, Pacman& pacman) 
-//{
-//    frightenedTimer.FrightenedTimer(frightenedDuration);
-//
-//    for (auto& ghost : ghosts) 
-//    {
-//        ghost.setMode(GhostMode::Frightened);
-//    }
-//
-//    std::cout << "Ghosts are frightened!" << std::endl;
-//
-//    if (pacman.hasEatenEnergizer) {
-//        PacmanEatsEnergizer(ghosts, frightenedTimer, 7.f); // 7 seconds of frightened mode
-//    }
-//}
-
 Direction Ghosts::OppositeDirection(Direction dir) //this returns the opposite of the last direction that I have been in
 {
     switch (dir) {
@@ -208,7 +190,7 @@ void Ghosts::Draw(sf::RenderWindow& window)
     window.draw(ghostSprite);
 }
 
-sf::Vector2f Ghosts::getPosition() const
+sf::Vector2f Ghosts::GetPosition() const
 {
     return ghostSprite.getPosition();
 }

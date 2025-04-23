@@ -64,6 +64,7 @@ public:
 	void MapSearch(char a, sf::Sprite& sprite);
 	void Draw(sf::RenderWindow& window);
 	virtual sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) = 0;
-	sf::Vector2f getPosition() const;
+	sf::Vector2f GetPosition() const; // Returns ghost position in pixels
+	GhostMode GetMode() { return mode; }
 	void setMode(GhostMode newMode);
 };

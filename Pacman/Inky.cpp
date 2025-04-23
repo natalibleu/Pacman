@@ -15,10 +15,10 @@ sf::Vector2f Inky::getTargetPosition(const sf::Vector2f& pacmanPos)
 		return cornerPosition;
 	}
 
-	sf::Vector2f distanceVectorPacman = pacmanPos - getPosition();
+	sf::Vector2f distanceVectorPacman = pacmanPos - GetPosition();
 	float distancePacman = distanceVectorPacman.length();
 
-	sf::Vector2f distanceVectorCorner = cornerPosition - getPosition();
+	sf::Vector2f distanceVectorCorner = cornerPosition - GetPosition();
 	float distanceCorner = distanceVectorCorner.length();
 
 	if (distancePacman < 3 * blockSize)

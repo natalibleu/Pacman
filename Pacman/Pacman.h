@@ -48,9 +48,10 @@ public:
     void SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
     void EatFruits(sf::Vector2f p);
     bool HasEatenFruit(sf::Vector2f p);
+    bool HasEatenGhost(sf::Vector2f p);
     void EatEnergizer(sf::Vector2f p);
     bool HasEatenEnergizer(sf::Vector2f p);
-    void EatGhost();
+    void EatGhost(sf::Vector2f p);
     void Move(float deltaTime);
     sf::Vector2f GetPosition();
     void DrawPacman(sf::RenderWindow& window);
