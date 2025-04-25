@@ -13,7 +13,7 @@ sf::Vector2f WrapCoords(const sf::Vector2f& p)
     return { std::fmod(p.x + sw, sw), std::fmod(p.y + sh, sh) };
 }
 
-sf::Vector2i ConvertCoordinates(sf::Vector2f p) 
+sf::Vector2i ConvertCoordinates(sf::Vector2f p)
 {
 
     p = WrapCoords(p);
@@ -56,7 +56,7 @@ void Pacman::EatEnergizer(sf::Vector2f p)
     currentScore++;
 
 
-    for (int i = 0; i < 4; i++) 
+    for (int i = 0; i < 4; i++)
     {
         ghosts[i]->setMode(GhostMode::Frightened);
 
@@ -70,31 +70,28 @@ bool Pacman::HasEatenEnergizer(sf::Vector2f p)
     return maze[indexes.x][indexes.y] == 'o';
 }
 
-bool Pacman::HasEatenGhost(sf::Vector2f p)
+Ghosts* Pacman::HasEatenGhost(sf::Vector2f p)
 {
-    sf::Vector2i indexes = ConvertCoordinates(p); // Tile position of p
+    sf::Vector2i indexes = ConvertCoordinates(p);// Tile position of p
     for (const auto& ghost : ghosts) { // Assuming ghosts is a std::vector<Ghosts>
         // Get ghost's runtime pixel position and convert to tile position
         sf::Vector2f ghostPos = ghost->GetPosition();
         sf::Vector2i ghostTile = ConvertCoordinates(ghostPos);
         if (ghostTile == indexes) {
-            return true; // Ghost is at this tile
+            std::cout << "collided with ghost" << std::endl;
+            return ghost; // Ghost is at this tile
         }
     }
-    return false;
+    return 0;
 }
 
-void Pacman::EatGhost(sf::Vector2f p)
+void Pacman::EatGhost(Ghosts* ghost)
 {
-    sf::Vector2i indexes = ConvertCoordinates(p);
-    for (auto& ghost : ghosts) 
-    {
-        sf::Vector2i ghostTile = ConvertCoordinates(ghost->GetPosition());
-        if (ghostTile == indexes && ghost->GetMode() == GhostMode::Frightened) 
-        {
-            currentScore += 200;
-        }
-    }
+
+    currentScore += 200;
+    std::cout << "Eaten ghost" << std::endl;
+    ghost->ResetGhost();
+
 }
 
 
@@ -159,6 +156,7 @@ void Pacman::UpdateAnimation(float deltaTime)
         currentAnimationPosition = 18;
         break;
     default:
+        currentAnimationPosition = 0;
         return;
     }
 
@@ -187,10 +185,10 @@ bool Pacman::MoveTo(float deltaTime)
         sf::Vector2f newPosition = currentTile + t * (nextTile - currentTile); //the distance between the current and next tile; linear interpolation
         pacmanSprite.setPosition(WrapCoords(newPosition));
     }
-    return interpolationTimer >= interpolationTime; 
+    return interpolationTimer >= interpolationTime;
 }
 
-void Pacman::Move(float deltaTime)
+bool Pacman::Move(float deltaTime)
 {
     // Update pacman's next move direction.
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
@@ -201,6 +199,20 @@ void Pacman::Move(float deltaTime)
         nextMoveDirection = MoveDirection::Left;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
         nextMoveDirection = MoveDirection::Right;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+        nextMoveDirection = MoveDirection::Right;
+
+    Ghosts* res = HasEatenGhost(currentTile);
+    if (res != 0)
+    {
+        if (res->GetMode() == GhostMode::Frightened) {
+            EatGhost(res);
+        }
+        else {
+            return false;
+        }
+    }
 
     // Move pacman towards the next tile.
     if (MoveTo(deltaTime))
@@ -215,17 +227,6 @@ void Pacman::Move(float deltaTime)
         if (HasEatenEnergizer(currentTile))
         {
             EatEnergizer(currentTile);
-        }
-
-        if (HasEatenGhost(currentTile))
-        {
-            for (auto& ghost : ghosts)
-            {
-                if (ghost->GetPosition() == currentTile && ghost->GetMode() == GhostMode::Frightened)
-                {
-                    EatGhost(currentTile);
-                }
-            }
         }
 
         // if we can go to the nextMoveDirection we go there
@@ -248,6 +249,7 @@ void Pacman::Move(float deltaTime)
     }
 
     UpdateAnimation(deltaTime);
+    return true;
 }
 
 sf::Vector2f Pacman::GetPosition()
@@ -258,10 +260,22 @@ sf::Vector2f Pacman::GetPosition()
 void Pacman::Die()
 {
     //collision with ghosts always when not in booster
+
 }
 
 Pacman::Pacman() : pacmanTexture("assets/Pacman.png"), pacmanSprite(pacmanTexture, sf::IntRect{ {0,0}, {32,32} })
 {
+    Reset();
+}
+
+void Pacman::Reset()
+{
+    currentMoveDirection = MoveDirection::None;
+    nextMoveDirection = MoveDirection::None;
+    currentFrame = 0;
+    animationTimer = 0;
+
+
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)

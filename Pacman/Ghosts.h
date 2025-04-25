@@ -50,6 +50,8 @@ protected:
 	sf::Texture ghostTexture;
 	sf::Sprite ghostSprite;
 
+	char mapSymbol;
+
 	sf::Texture defaultTexture;
 
 	GhostMode mode = GhostMode::Chase;
@@ -61,10 +63,11 @@ public:
 	Direction OppositeDirection(Direction dir);
 	void Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos = { 0.f, 0.f });
 	bool MoveTo(float deltaTime);
-	void MapSearch(char a, sf::Sprite& sprite);
+	void MapSearch();
 	void Draw(sf::RenderWindow& window);
 	virtual sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) = 0;
 	sf::Vector2f GetPosition() const; // Returns ghost position in pixels
 	GhostMode GetMode() { return mode; }
 	void setMode(GhostMode newMode);
+	void ResetGhost();
 };

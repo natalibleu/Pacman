@@ -69,6 +69,12 @@ void Ghosts::setMode(GhostMode newMode)
     }
 }
 
+void Ghosts::ResetGhost()
+{
+    setMode(GhostMode::Chase);
+    MapSearch();
+}
+
 Direction Ghosts::OppositeDirection(Direction dir) //this returns the opposite of the last direction that I have been in
 {
     switch (dir) {
@@ -98,7 +104,7 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
     // update the timer of the ghost
     modeTimer.Update(deltaTime);
     // Check the mode timer and adjust the mode if necessary
-    std::cout << modeTimer.Time() << std::endl;
+    //std::cout << modeTimer.Time() << std::endl;
     if (modeTimer.Time() < 0.f) {
         switch (mode)
         {
@@ -166,20 +172,20 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
     }
 }
 
-void Ghosts::MapSearch(char a, sf::Sprite& sprite)
+void Ghosts::MapSearch()
 {
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)
         {
-            if (maze[i][j] == a)
+            if (maze[i][j] == mapSymbol)
             {
                 float x = static_cast<float>(j * blockSize);
                 float y = static_cast<float>(i * blockSize);
 
                 currentTile = nextTile = sf::Vector2f{ x, y };
 
-                sprite.setPosition(currentTile);
+                ghostSprite.setPosition(currentTile);
             }
         }
     }
@@ -202,5 +208,6 @@ Ghosts::Ghosts(const std::string& texturePath, char a)
       frightenedSprite(frightenedTexture)*/
 {
     modeTimer.Start();
-    MapSearch(a, ghostSprite);
+    mapSymbol = a;
+    MapSearch();
 }

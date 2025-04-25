@@ -15,3 +15,8 @@ void Score::UpdateScore(sf::RenderWindow& window)
 	text.setCharacterSize(24);
 	window.draw(text);
 }
+
+void Score::Reset()
+{
+	currentScore = 0;
+}
