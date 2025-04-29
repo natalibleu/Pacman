@@ -68,6 +68,7 @@ public:
 	virtual sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) = 0;
 	sf::Vector2f GetPosition() const; // Returns ghost position in pixels
 	GhostMode GetMode() { return mode; }
+	sf::Sprite GetSprite() { return ghostSprite; }
 	void setMode(GhostMode newMode);
 	void ResetGhost();
 };

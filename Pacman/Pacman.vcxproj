@@ -149,6 +149,7 @@
     <ClCompile Include="Energizer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Inky.cpp" />
+    <ClCompile Include="Lives.cpp" />
     <ClCompile Include="Pellets.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Ghosts.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Energizer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Inky.h" />
+    <ClInclude Include="Lives.h" />
     <ClInclude Include="Pellets.h" />
     <ClInclude Include="Ghosts.h" />
     <ClInclude Include="Map.h" />

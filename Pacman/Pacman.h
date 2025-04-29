@@ -54,6 +54,7 @@ public:
     void EatGhost(Ghosts* ghost);
     bool Move(float deltaTime);
     sf::Vector2f GetPosition();
+    sf::Sprite GetSprite() { return pacmanSprite; }
     void DrawPacman(sf::RenderWindow& window);
     void Reset();
     void Die();

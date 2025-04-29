@@ -28,19 +28,24 @@ void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
     clyde.Draw(window);
 
     score.UpdateScore(window);
+    lives.CheckCollision(window, pacman, blinky, pinky, inky, clyde);
 
     window.display();
 }
 
 void Game::Reset()
 {
-    blinky.ResetGhost();
-    inky.ResetGhost();
-    pinky.ResetGhost();
-    clyde.ResetGhost();
+    if (lives.GetLives() == 0)
+    {
+        blinky.ResetGhost();
+        inky.ResetGhost();
+        pinky.ResetGhost();
+        clyde.ResetGhost();
 
-    pacman.Reset();
-    score.Reset();
+        pacman.Reset();
+        score.Reset();
+        lives.Reset();
 
-    map.Reset();
+        map.Reset();
+    }
 }
