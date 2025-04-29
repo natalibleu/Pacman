@@ -26,9 +26,13 @@ class Game
     Clyde clyde;
     Lives lives;
 
+    bool isRunning = true;
+
 
 public:
     Game();
     void Update(sf::RenderWindow& window, sf::Time& elapsedTime);
     void Reset();
+    void CheckLives();
+    void CheckWin();
 };

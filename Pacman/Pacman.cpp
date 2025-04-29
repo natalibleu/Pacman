@@ -39,6 +39,7 @@ void Pacman::EatFruits(sf::Vector2f p)
 
     maze[indexes.x][indexes.y] = ' ';
     currentScore++;
+    eatenPellets++;
 }
 
 bool Pacman::HasEatenFruit(sf::Vector2f p)
@@ -54,6 +55,7 @@ void Pacman::EatEnergizer(sf::Vector2f p)
 
     maze[indexes.x][indexes.y] = ' ';
     currentScore++;
+    eatenEnergizers++;
 
 
     for (int i = 0; i < 4; i++)
@@ -68,21 +70,6 @@ bool Pacman::HasEatenEnergizer(sf::Vector2f p)
     sf::Vector2i indexes = ConvertCoordinates(p);
 
     return maze[indexes.x][indexes.y] == 'o';
-}
-
-Ghosts* Pacman::HasEatenGhost(sf::Vector2f p)
-{
-    sf::Vector2i indexes = ConvertCoordinates(p);// Tile position of p
-    for (const auto& ghost : ghosts) { // Assuming ghosts is a std::vector<Ghosts>
-        // Get ghost's runtime pixel position and convert to tile position
-        sf::Vector2f ghostPos = ghost->GetPosition();
-        sf::Vector2i ghostTile = ConvertCoordinates(ghostPos);
-        if (ghostTile == indexes) {
-            std::cout << "collided with ghost" << std::endl;
-            return ghost; // Ghost is at this tile
-        }
-    }
-    return 0;
 }
 
 void Pacman::EatGhost(Ghosts* ghost)
@@ -203,17 +190,6 @@ bool Pacman::Move(float deltaTime)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
         nextMoveDirection = MoveDirection::Right;
 
-    Ghosts* res = HasEatenGhost(currentTile);
-    if (res != 0)
-    {
-        if (res->GetMode() == GhostMode::Frightened) {
-            EatGhost(res);
-        }
-        else {
-            return false;
-        }
-    }
-
     // Move pacman towards the next tile.
     if (MoveTo(deltaTime))
     {
@@ -275,7 +251,6 @@ void Pacman::Reset()
     currentFrame = 0;
     animationTimer = 0;
 
-
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)
@@ -290,5 +265,12 @@ void Pacman::Reset()
                 pacmanSprite.setPosition(currentTile);
             }
         }
+    }
+}
+
+void Pacman::ResetGhosts()
+{
+    for (int i = 0; i < 4; i++) {
+        ghosts[i]->ResetGhost();
     }
 }

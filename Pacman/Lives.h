@@ -13,7 +13,7 @@ private:
 
 public:
     Lives();
-    bool IsAlive(sf::FloatRect& pacman, sf::FloatRect& ghost);
+    bool IsColliding(sf::FloatRect& pacman, sf::FloatRect& ghost);
     void CheckCollision(sf::RenderWindow& window, Pacman& pacman, Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
     void CheckGhost(Pacman& pacman, Ghosts& ghost);
     int GetLives() { return lives; }
