@@ -4,71 +4,72 @@
 
 enum class Direction
 {
-	None,
-	Up,
-	Down,
-	Left,
-	Right
+    None,
+    Up,
+    Down,
+    Left,
+    Right
 };
 
 enum class GhostMode
 {
-	Scatter,
-	Chase,
-	Frightened
+    Scatter,
+    Chase,
+    Frightened
 };
 
 class Ghosts
 {
 private:
-	//sf::Texture frightenedTexture;
-	//sf::Sprite frightenedSprite;
+    //sf::Texture frightenedTexture;
+    //sf::Sprite frightenedSprite;
 
-	// Ghost's current direction.
-	Direction currentMoveDirection = Direction::None;
-	// Ghost's desired direction.
-	Direction nextMoveDirection = Direction::None;
+    // Ghost's current direction.
+    Direction currentMoveDirection = Direction::None;
+    // Ghost's desired direction.
+    Direction nextMoveDirection = Direction::None;
 
-	// The tile ghost is currently in.
-	sf::Vector2f currentTile;
-	// The tile ghost is moving to.
-	sf::Vector2f nextTile;
+    // The tile ghost is currently in.
+    sf::Vector2f currentTile;
+    // The tile ghost is moving to.
+    sf::Vector2f nextTile;
 
-	//setTargetPosition(sf::Vector2f pacmanPos); override n every ghost, declare here and define in every ghost
+    //setTargetPosition(sf::Vector2f pacmanPos); override n every ghost, declare here and define in every ghost
 
-	float interpolationTime = 0.0f;
-	float interpolationTimer = 0.0f;
-	float moveSpeed = 150.0f;
+    float interpolationTime = 0.0f;
+    float interpolationTimer = 0.0f;
+    float moveSpeed = 150.0f;
 
-	float animationTimer = 0.0f;
-	float animationEndTime = 0.1f; // Animation frame duration
-	int currentFrame = 0;
+    float animationTimer = 0.0f;
+    float animationEndTime = 0.1f; // Animation frame duration
+    int currentFrame = 0;
 
-	bool scatterMode = false;
+    bool scatterMode = false;
 
 protected:
-	sf::Texture ghostTexture;
-	sf::Sprite ghostSprite;
+    sf::Texture ghostTexture;
+    sf::Sprite ghostSprite;
 
-	char mapSymbol;
+    char mapSymbol;
 
-	sf::Texture defaultTexture;
+    sf::Texture defaultTexture;
 
-	GhostMode mode = GhostMode::Chase;
-	Timers modeTimer;
+    GhostMode mode = GhostMode::Chase;
+    Timers modeTimer;
 
-	Ghosts(const std::string& texturePath, char a);
+    Ghosts(const std::string& texturePath, char a);
 
 public:
-	Direction OppositeDirection(Direction dir);
-	void Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos = { 0.f, 0.f });
-	bool MoveTo(float deltaTime);
-	void MapSearch();
-	void Draw(sf::RenderWindow& window);
-	virtual sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) = 0;
-	sf::Vector2f GetPosition() const; // Returns ghost position in pixels
-	GhostMode GetMode() { return mode; }
-	sf::Sprite GetSprite() { return ghostSprite; }
-	void setMode(GhostMode newMode);
-	void ResetGhost();
+    Direction OppositeDirection(Direction dir);
+    void Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos = { 0.f, 0.f });
+    bool MoveTo(float deltaTime);
+    void MapSearch();
+    void UpdateAnimation(float deltaTime);
+    void Draw(sf::RenderWindow& window);
+    virtual sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) = 0;
+    sf::Vector2f GetPosition() const; // Returns ghost position in pixels
+    GhostMode GetMode() { return mode; }
+    sf::Sprite GetSprite() { return ghostSprite; }
+    void setMode(GhostMode newMode);
+    void ResetGhost();
 };

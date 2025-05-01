@@ -14,8 +14,10 @@ enum class MoveDirection
 class Pacman
 {
 private:
-    sf::Texture pacmanTexture;
+    sf::Texture defaultTexture;
     sf::Sprite pacmanSprite;
+
+    sf::Texture pacmanTexture;
 
     // Pacman's current direction.
     MoveDirection currentMoveDirection = MoveDirection::None;
@@ -40,6 +42,8 @@ private:
 
     void UpdateAnimation(float deltaTime);
 
+    bool won = false;
+
     // Move pacman towards the next tile.
     // Return true if pacman reached the next tile.
     bool MoveTo(float deltaTime);
@@ -51,6 +55,7 @@ public:
     void SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
     void EatFruits(sf::Vector2f p);
     bool HasEatenFruit(sf::Vector2f p);
+    void EndingAnimation(float deltaTime);
     void EatEnergizer(sf::Vector2f p);
     bool HasEatenEnergizer(sf::Vector2f p);
     void EatGhost(Ghosts* ghost);
@@ -60,6 +65,5 @@ public:
     void DrawPacman(sf::RenderWindow& window);
     void Reset();
     void ResetGhosts();
-    void Die();
     Pacman();
 };

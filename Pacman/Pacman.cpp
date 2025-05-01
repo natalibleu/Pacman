@@ -61,7 +61,6 @@ void Pacman::EatEnergizer(sf::Vector2f p)
     for (int i = 0; i < 4; i++)
     {
         ghosts[i]->setMode(GhostMode::Frightened);
-
     }
 }
 
@@ -162,6 +161,31 @@ void Pacman::UpdateAnimation(float deltaTime)
     pacmanSprite.setTextureRect(sf::IntRect{ {animationIndex * 32 + 2, 0}, {28, 32} });
 }
 
+void Pacman::EndingAnimation(float deltaTime)
+{
+    if (!won)
+    {
+        won = true;
+
+        if (!pacmanTexture.loadFromFile("assets/ending.png")) {
+            return;
+        }
+        pacmanSprite.setTexture(pacmanTexture);
+        animationTimer = 0;
+        currentFrame = 0;
+    }
+
+    animationTimer += deltaTime; // we increase the value of the timer with deltaTime step
+    currentFrame = animationTimer * 10;
+
+    if (currentFrame > 11)
+    {
+        return;
+    }
+
+    pacmanSprite.setTextureRect(sf::IntRect{ {currentFrame * 38, 0}, {32, 32} });
+}
+
 bool Pacman::MoveTo(float deltaTime)
 {
     interpolationTimer += deltaTime; //to track progress of interpolation time
@@ -233,12 +257,6 @@ sf::Vector2f Pacman::GetPosition()
     return pacmanSprite.getPosition();
 }
 
-void Pacman::Die()
-{
-    //collision with ghosts always when not in booster
-
-}
-
 Pacman::Pacman() : pacmanTexture("assets/Pacman.png"), pacmanSprite(pacmanTexture, sf::IntRect{ {0,0}, {32,32} })
 {
     Reset();
@@ -266,6 +284,7 @@ void Pacman::Reset()
             }
         }
     }
+    pacmanSprite.setTextureRect(sf::IntRect{ {2, 0}, {28, 32} });
 }
 
 void Pacman::ResetGhosts()

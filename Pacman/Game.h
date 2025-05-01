@@ -27,12 +27,12 @@ class Game
     Lives lives;
 
     bool isRunning = true;
-
+    bool gameWon = false;
 
 public:
     Game();
     void Update(sf::RenderWindow& window, sf::Time& elapsedTime);
     void Reset();
     void CheckLives();
-    void CheckWin();
+    void CheckWin(sf::Time& elapsedTime);
 };

@@ -99,12 +99,52 @@ bool Ghosts::MoveTo(float deltaTime)
     return interpolationTimer >= interpolationTime;
 }
 
+void Ghosts::UpdateAnimation(float deltaTime)
+{
+    int currentAnimationPosition = 0; //current section
+
+    switch (currentMoveDirection)
+    {
+    case Direction::Up:
+        currentAnimationPosition = 0;
+        break;
+    case Direction::Down:
+        currentAnimationPosition = 2;
+        break;
+    case Direction::Left:
+        currentAnimationPosition = 4;
+        break;
+    case Direction::Right:
+        currentAnimationPosition = 0;
+        break;
+    default:
+        currentAnimationPosition = 0;
+        return;
+    }
+
+    if (mode != GhostMode::Frightened) {
+        animationTimer += deltaTime;
+        if (animationTimer > animationEndTime)
+        {
+            animationTimer = 0.0f;
+            currentFrame = (currentFrame + 1) % 2;
+        }
+    }
+    else {
+        // Force to a single frame (e.g., first frame of frightened texture)
+        currentFrame = 0;
+        currentAnimationPosition = 0; // assuming frightened.png has only one frame in the first slot
+    }
+
+    int animationIndex = currentFrame + currentAnimationPosition;
+    ghostSprite.setTextureRect(sf::IntRect{ {animationIndex * 36, 0}, {32, 32} });
+}
+
 void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos)
 {
     // update the timer of the ghost
     modeTimer.Update(deltaTime);
     // Check the mode timer and adjust the mode if necessary
-    //std::cout << modeTimer.Time() << std::endl;
     if (modeTimer.Time() < 0.f) {
         switch (mode)
         {
@@ -122,7 +162,6 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
             break;
         }
     }
-
 
     sf::Vector2f targetPosition = getTargetPosition(pacmanPos);
 
@@ -170,6 +209,8 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
             : 0.0f;
         interpolationTimer = 0.0f;
     }
+
+    UpdateAnimation(deltaTime);
 }
 
 void Ghosts::MapSearch()
@@ -204,8 +245,6 @@ sf::Vector2f Ghosts::GetPosition() const
 Ghosts::Ghosts(const std::string& texturePath, char a)
     : ghostTexture(texturePath), modeTimer(7.f), defaultTexture(ghostTexture),
     ghostSprite(ghostTexture, sf::IntRect{ { 0,0, },{ 32, 32} })
-    /*  frightenedTexture("assets/frightened.png"),
-      frightenedSprite(frightenedTexture)*/
 {
     modeTimer.Start();
     mapSymbol = a;
