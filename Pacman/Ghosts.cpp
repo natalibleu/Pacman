@@ -61,6 +61,7 @@ void Ghosts::setMode(GhostMode newMode)
             return;
         }
         ghostSprite.setTexture(ghostTexture);
+        audio.UpdateSound(LoadAudio::BlueGhosts);
     }
     // else, we set it to default
     else {
@@ -243,7 +244,7 @@ sf::Vector2f Ghosts::GetPosition() const
 }
 
 Ghosts::Ghosts(const std::string& texturePath, char a)
-    : ghostTexture(texturePath), modeTimer(7.f), defaultTexture(ghostTexture),
+    : ghostTexture(texturePath), modeTimer(5.f), defaultTexture(ghostTexture),
     ghostSprite(ghostTexture, sf::IntRect{ { 0,0, },{ 32, 32} })
 {
     modeTimer.Start();

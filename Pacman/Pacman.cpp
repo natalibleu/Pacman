@@ -35,6 +35,8 @@ void Pacman::SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyd
 
 void Pacman::EatFruits(sf::Vector2f p)
 {
+    audio.UpdateSound(LoadAudio::EatFood);
+
     sf::Vector2i indexes = ConvertCoordinates(p);
 
     maze[indexes.x][indexes.y] = ' ';
@@ -51,12 +53,12 @@ bool Pacman::HasEatenFruit(sf::Vector2f p)
 
 void Pacman::EatEnergizer(sf::Vector2f p)
 {
+
     sf::Vector2i indexes = ConvertCoordinates(p);
 
     maze[indexes.x][indexes.y] = ' ';
     currentScore++;
     eatenEnergizers++;
-
 
     for (int i = 0; i < 4; i++)
     {
@@ -67,17 +69,17 @@ void Pacman::EatEnergizer(sf::Vector2f p)
 bool Pacman::HasEatenEnergizer(sf::Vector2f p)
 {
     sf::Vector2i indexes = ConvertCoordinates(p);
+    audio.UpdateSound(LoadAudio::EatFood);
 
     return maze[indexes.x][indexes.y] == 'o';
 }
 
 void Pacman::EatGhost(Ghosts* ghost)
 {
-
     currentScore += 200;
     std::cout << "Eaten ghost" << std::endl;
+    audio.UpdateSound(LoadAudio::EatGhost);
     ghost->ResetGhost();
-
 }
 
 
@@ -257,7 +259,7 @@ sf::Vector2f Pacman::GetPosition()
     return pacmanSprite.getPosition();
 }
 
-Pacman::Pacman() : pacmanTexture("assets/Pacman.png"), pacmanSprite(pacmanTexture, sf::IntRect{ {0,0}, {32,32} })
+Pacman::Pacman() : defaultTexture("assets/Pacman.png"), pacmanSprite(pacmanTexture, sf::IntRect{ {0,0}, {32,32} })
 {
     Reset();
 }
@@ -268,6 +270,8 @@ void Pacman::Reset()
     nextMoveDirection = MoveDirection::None;
     currentFrame = 0;
     animationTimer = 0;
+
+    pacmanTexture = defaultTexture;
 
     for (int i = 0; i < rows; i++)
     {

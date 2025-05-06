@@ -2,11 +2,9 @@
 #include "Game.h"
 #include <iostream>
 
-
 Game::Game()
 {
     pacman.SetGhosts(blinky, pinky, inky, clyde);
-
 }
 
 void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
@@ -19,6 +17,10 @@ void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
     pinky.Draw(window);
     inky.Draw(window);
     clyde.Draw(window);
+    if (showText)
+    {
+        text.StartGame(window);
+    }
 
     if (isRunning)
     {
@@ -30,14 +32,20 @@ void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
         inky.Move(elapsedTime.asSeconds(), inky.getTargetPosition(pacman.GetPosition()));
 
         score.UpdateScore(window);
-        lives.CheckCollision(window, pacman, blinky, pinky, inky, clyde);
+        lives.CheckCollision(window, pacman,audio, blinky, pinky, inky, clyde);
         CheckLives();
-        CheckWin(elapsedTime);
+        CheckWin(elapsedTime, window);
     }
-    else
+    else if(gameWon)
     {
         //just load the ending animation and freeze all game updates
         pacman.EndingAnimation(elapsedTime.asSeconds());
+        text.WinningText(window);
+    }
+    else if(killed)
+    {
+        pacman.EndingAnimation(elapsedTime.asSeconds());
+        text.LosingText(window);
     }
 
     pacman.DrawPacman(window);
@@ -67,15 +75,19 @@ void Game::CheckLives()
 {
     if (lives.GetLives() <= 0)
     {
-        Reset();
+        isRunning = false;
+        killed = true;
+        audio.UpdateSound(LoadAudio::ResetDie);
     }
 }
 
-void Game::CheckWin(sf::Time& elapsedTime)
+void Game::CheckWin(sf::Time& elapsedTime, sf::RenderWindow& window)
 {
     if (pacman.eatenPellets + pacman.eatenEnergizers >= 150)
     {
         isRunning = false;
+        gameWon = true;
         std::cout << "You won" << std::endl;
+        audio.UpdateSound(LoadAudio::Win);
     }
 }

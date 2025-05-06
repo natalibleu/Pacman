@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Timers.h"
+#include "Audio.h"
 
 enum class Direction
 {
@@ -34,7 +35,7 @@ private:
     // The tile ghost is moving to.
     sf::Vector2f nextTile;
 
-    //setTargetPosition(sf::Vector2f pacmanPos); override n every ghost, declare here and define in every ghost
+    Audio audio;
 
     float interpolationTime = 0.0f;
     float interpolationTimer = 0.0f;

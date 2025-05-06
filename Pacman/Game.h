@@ -11,6 +11,8 @@
 #include "Ghosts.h"
 #include "Constants.h"
 #include "Lives.h"
+#include "Text.h"
+#include "Audio.h"
 
 class Game
 {
@@ -25,14 +27,19 @@ class Game
     Inky inky;
     Clyde clyde;
     Lives lives;
+    Text text;
+    Audio audio;
 
-    bool isRunning = true;
     bool gameWon = false;
+    bool killed = false;
 
 public:
+
+    bool isRunning = false;
+    bool showText = true;
     Game();
     void Update(sf::RenderWindow& window, sf::Time& elapsedTime);
     void Reset();
     void CheckLives();
-    void CheckWin(sf::Time& elapsedTime);
+    void CheckWin(sf::Time& elapsedTime, sf::RenderWindow& window);
 };

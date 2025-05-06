@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Ghosts.h"
+#include "Audio.h"
 
 enum class MoveDirection
 {
@@ -18,6 +19,8 @@ private:
     sf::Sprite pacmanSprite;
 
     sf::Texture pacmanTexture;
+
+    Audio audio;
 
     // Pacman's current direction.
     MoveDirection currentMoveDirection = MoveDirection::None;

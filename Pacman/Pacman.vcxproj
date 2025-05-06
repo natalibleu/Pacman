@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Blinky.cpp" />
     <ClCompile Include="Clyde.cpp" />
     <ClCompile Include="Constants.h" />
@@ -157,9 +158,11 @@
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="Pinky.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Blinky.h" />
     <ClInclude Include="Clyde.h" />
     <ClInclude Include="Energizer.h" />
@@ -172,7 +175,11 @@
     <ClInclude Include="Pacman.h" />
     <ClInclude Include="Pinky.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Timers.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
