@@ -1,30 +1,10 @@
 #include "Ghosts.h"
 #include "Constants.h"
 #include "Map.h"
-#include <iostream>
-
-sf::Vector2f WrapCoords2(const sf::Vector2f& p)
-{
-    float sw = static_cast<float>(screenWidth);
-    float sh = static_cast<float>(screenHeight);
-
-    return { std::fmod(p.x + sw, sw), std::fmod(p.y + sh, sh) };
-}
-
-sf::Vector2i ConvertCoordinates2(sf::Vector2f p)
-{
-
-    p = WrapCoords2(p);
-
-    int c = static_cast<int>(p.x) / blockSize;
-    int r = static_cast<int>(p.y) / blockSize;
-
-    return sf::Vector2i{ r,c };
-}
 
 bool CanMoveTo(sf::Vector2f p)
 {
-    sf::Vector2i indexes = ConvertCoordinates2(p);
+    sf::Vector2i indexes = ConvertCoordinates(p);
 
     // Grid cells with a # are walls.
     return maze[indexes.x][indexes.y] != '#';
@@ -57,15 +37,12 @@ void Ghosts::setMode(GhostMode newMode)
     modeTimer.Start();
     // if we are in frightened mode, change the sprite
     if (mode == GhostMode::Frightened) {
-        if (!ghostTexture.loadFromFile("assets/frightened.png")) {
-            return;
-        }
-        ghostSprite.setTexture(ghostTexture);
+        ghostSprite.setTexture(frightenedTexture);
         audio.UpdateSound(LoadAudio::BlueGhosts);
     }
     // else, we set it to default
     else {
-        ghostTexture = defaultTexture;
+        audio.StopBlueGhostSound();
         ghostSprite.setTexture(ghostTexture);
     }
 }
@@ -95,7 +72,7 @@ bool Ghosts::MoveTo(float deltaTime)
     {
         float t = std::min(1.0f, interpolationTimer / interpolationTime);
         sf::Vector2f newPosition = currentTile + t * (nextTile - currentTile);
-        ghostSprite.setPosition(WrapCoords2(newPosition));
+        ghostSprite.setPosition(WrapCoords(newPosition));
     }
     return interpolationTimer >= interpolationTime;
 }
@@ -167,7 +144,7 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
     sf::Vector2f targetPosition = getTargetPosition(pacmanPos);
 
     if (MoveTo(deltaTime)) {
-        currentTile = WrapCoords2(nextTile);
+        currentTile = WrapCoords(nextTile);
 
         //choosing direction toward Pacman
         float bestDist = mode == GhostMode::Chase || mode == GhostMode::Scatter ? std::numeric_limits<float>::max() : std::numeric_limits<float>::min();
@@ -244,7 +221,7 @@ sf::Vector2f Ghosts::GetPosition() const
 }
 
 Ghosts::Ghosts(const std::string& texturePath, char a)
-    : ghostTexture(texturePath), modeTimer(5.f), defaultTexture(ghostTexture),
+    : ghostTexture(texturePath), modeTimer(5.f), frightenedTexture("assets/frightened.png"),
     ghostSprite(ghostTexture, sf::IntRect{ { 0,0, },{ 32, 32} })
 {
     modeTimer.Start();

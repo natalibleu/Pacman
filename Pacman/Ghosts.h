@@ -53,7 +53,7 @@ protected:
 
     char mapSymbol;
 
-    sf::Texture defaultTexture;
+    sf::Texture frightenedTexture;
 
     GhostMode mode = GhostMode::Chase;
     Timers modeTimer;

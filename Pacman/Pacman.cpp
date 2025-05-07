@@ -3,27 +3,6 @@
 #include "Constants.h"
 #include "Score.h"
 #include "Timers.h"
-#include <iostream>
-
-sf::Vector2f WrapCoords(const sf::Vector2f& p)
-{
-    float sw = static_cast<float>(screenWidth);
-    float sh = static_cast<float>(screenHeight);
-
-    return { std::fmod(p.x + sw, sw), std::fmod(p.y + sh, sh) };
-}
-
-sf::Vector2i ConvertCoordinates(sf::Vector2f p)
-{
-
-    p = WrapCoords(p);
-
-    int c = static_cast<int>(p.x) / blockSize;
-    int r = static_cast<int>(p.y) / blockSize;
-
-    return sf::Vector2i{ r,c };
-}
-
 
 void Pacman::SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde)
 {
@@ -59,6 +38,7 @@ void Pacman::EatEnergizer(sf::Vector2f p)
     maze[indexes.x][indexes.y] = ' ';
     currentScore++;
     eatenEnergizers++;
+    audio.UpdateSound(LoadAudio::EatFood);
 
     for (int i = 0; i < 4; i++)
     {
@@ -69,7 +49,6 @@ void Pacman::EatEnergizer(sf::Vector2f p)
 bool Pacman::HasEatenEnergizer(sf::Vector2f p)
 {
     sf::Vector2i indexes = ConvertCoordinates(p);
-    audio.UpdateSound(LoadAudio::EatFood);
 
     return maze[indexes.x][indexes.y] == 'o';
 }
@@ -77,7 +56,6 @@ bool Pacman::HasEatenEnergizer(sf::Vector2f p)
 void Pacman::EatGhost(Ghosts* ghost)
 {
     currentScore += 200;
-    std::cout << "Eaten ghost" << std::endl;
     audio.UpdateSound(LoadAudio::EatGhost);
     ghost->ResetGhost();
 }
@@ -271,7 +249,10 @@ void Pacman::Reset()
     currentFrame = 0;
     animationTimer = 0;
 
+    won = false;
+
     pacmanTexture = defaultTexture;
+    pacmanSprite.setTexture(pacmanTexture);
 
     for (int i = 0; i < rows; i++)
     {

@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
-#include <iostream>
 
 Game::Game()
 {
@@ -32,17 +31,17 @@ void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
         inky.Move(elapsedTime.asSeconds(), inky.getTargetPosition(pacman.GetPosition()));
 
         score.UpdateScore(window);
-        lives.CheckCollision(window, pacman,audio, blinky, pinky, inky, clyde);
+        lives.CheckCollision(window, pacman, audio, blinky, pinky, inky, clyde);
         CheckLives();
         CheckWin(elapsedTime, window);
     }
-    else if(gameWon)
+    else if (gameWon)
     {
         //just load the ending animation and freeze all game updates
         pacman.EndingAnimation(elapsedTime.asSeconds());
         text.WinningText(window);
     }
-    else if(killed)
+    else if (killed)
     {
         pacman.EndingAnimation(elapsedTime.asSeconds());
         text.LosingText(window);
@@ -63,7 +62,12 @@ void Game::Reset()
     score.Reset();
     lives.Reset();
 
+    audio.Reset();
+
     isRunning = true;
+    killed = false;
+    gameWon = false;
+    showText = false;
 
     pacman.eatenPellets = 0;
     pacman.eatenEnergizers = 0;
@@ -87,7 +91,7 @@ void Game::CheckWin(sf::Time& elapsedTime, sf::RenderWindow& window)
     {
         isRunning = false;
         gameWon = true;
-        std::cout << "You won" << std::endl;
+        audio.StopBlueGhostSound();
         audio.UpdateSound(LoadAudio::Win);
     }
 }
