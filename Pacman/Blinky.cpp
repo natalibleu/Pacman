@@ -11,6 +11,7 @@ sf::Vector2f Blinky::getTargetPosition(const sf::Vector2f& pacmanPos)
 {
 	if (mode == GhostMode::Scatter)
 	{
+		//getting the corresponding corner position to each ghost
 		return sf::Vector2f{ 0.f, 0.f };
 	}
 	return pacmanPos;

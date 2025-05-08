@@ -3,15 +3,6 @@
 #include "Ghosts.h"
 #include "Audio.h"
 
-enum class MoveDirection
-{
-    None,
-    Up,
-    Down,
-    Left,
-    Right
-};
-
 class Pacman
 {
 private:

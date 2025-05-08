@@ -12,6 +12,7 @@ sf::Vector2f Clyde::getTargetPosition(const sf::Vector2f& pacmanPos)
 {
     if (mode == GhostMode::Scatter)
     {
+        //getting the corresponding corner position to each ghost
         return sf::Vector2f{ 0.f, static_cast<float>(screenHeight) };
     }
 
@@ -21,14 +22,16 @@ sf::Vector2f Clyde::getTargetPosition(const sf::Vector2f& pacmanPos)
     //getting vector from Blinky's position to Clyde's target
     sf::Vector2f vectorToTarget = clydeTarget - blinkyPos;
 
-    //doubling the vector.
+    //doubling the resulted vector.
     sf::Vector2f doubledVector = vectorToTarget * 2.f;
 
     //targeting the cell the doubled vector points to from Clyde's current position
     sf::Vector2f currentPos = ghostSprite.getPosition();
+
+    //gives the vector position of the doubled position from the current position
     sf::Vector2f finalTarget = currentPos + doubledVector;
 
-    //converting to grid coordinates and snap to nearest cell
+    //converting to grid coordinates and putting it to the nearest cell
     int targetColumn = static_cast<int>(finalTarget.x / blockSize) * blockSize;
     int targetRow = static_cast<int>(finalTarget.y / blockSize) * blockSize;
 

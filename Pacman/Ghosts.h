@@ -2,15 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Timers.h"
 #include "Audio.h"
+#include "Constants.h"
 
-enum class Direction
-{
-    None,
-    Up,
-    Down,
-    Left,
-    Right
-};
 
 enum class GhostMode
 {
@@ -26,9 +19,9 @@ private:
     //sf::Sprite frightenedSprite;
 
     // Ghost's current direction.
-    Direction currentMoveDirection = Direction::None;
+    MoveDirection currentMoveDirection = MoveDirection::None;
     // Ghost's desired direction.
-    Direction nextMoveDirection = Direction::None;
+    MoveDirection nextMoveDirection = MoveDirection::None;
 
     // The tile ghost is currently in.
     sf::Vector2f currentTile;
@@ -61,7 +54,6 @@ protected:
     Ghosts(const std::string& texturePath, char a);
 
 public:
-    Direction OppositeDirection(Direction dir);
     void Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos = { 0.f, 0.f });
     bool MoveTo(float deltaTime);
     void MapSearch();

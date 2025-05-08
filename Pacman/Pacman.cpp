@@ -75,25 +75,6 @@ void Pacman::DrawPacman(sf::RenderWindow& window) //self explanatory
     pacmanSprite.setPosition(currentPosition);
 }
 
-sf::Vector2f GetNextTile(MoveDirection dir)
-{
-    switch (dir)
-    {
-    case MoveDirection::None:
-        return { 0, 0 };
-    case MoveDirection::Up:
-        return { 0, -32 };
-    case MoveDirection::Down:
-        return { 0, 32 };
-    case MoveDirection::Left:
-        return { -32, 0 };
-    case MoveDirection::Right:
-        return { 32, 0 };
-    }
-
-    return { 0, 0 };
-}
-
 // Return true if the tile is not blocked
 bool CanMove(sf::Vector2f p)
 {

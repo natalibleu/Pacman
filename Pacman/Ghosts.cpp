@@ -1,5 +1,4 @@
 #include "Ghosts.h"
-#include "Constants.h"
 #include "Map.h"
 
 bool CanMoveTo(sf::Vector2f p)
@@ -8,25 +7,6 @@ bool CanMoveTo(sf::Vector2f p)
 
     // Grid cells with a # are walls.
     return maze[indexes.x][indexes.y] != '#';
-}
-
-sf::Vector2f GetNextTile(Direction dir)
-{
-    switch (dir)
-    {
-    case Direction::None:
-        return { 0, 0 };
-    case Direction::Up:
-        return { 0, -32 };
-    case Direction::Down:
-        return { 0, 32 };
-    case Direction::Left:
-        return { -32, 0 };
-    case Direction::Right:
-        return { 32, 0 };
-    }
-
-    return { 0, 0 };
 }
 
 void Ghosts::setMode(GhostMode newMode)
@@ -53,16 +33,6 @@ void Ghosts::ResetGhost()
     MapSearch();
 }
 
-Direction Ghosts::OppositeDirection(Direction dir) //this returns the opposite of the last direction that I have been in
-{
-    switch (dir) {
-    case Direction::Up: return Direction::Down;
-    case Direction::Down: return Direction::Up;
-    case Direction::Left: return Direction::Right;
-    case Direction::Right: return Direction::Left;
-    default: return Direction::None;
-    }
-}
 
 bool Ghosts::MoveTo(float deltaTime)
 {
@@ -83,16 +53,16 @@ void Ghosts::UpdateAnimation(float deltaTime)
 
     switch (currentMoveDirection)
     {
-    case Direction::Up:
+    case MoveDirection::Up:
         currentAnimationPosition = 0;
         break;
-    case Direction::Down:
+    case MoveDirection::Down:
         currentAnimationPosition = 2;
         break;
-    case Direction::Left:
+    case MoveDirection::Left:
         currentAnimationPosition = 4;
         break;
-    case Direction::Right:
+    case MoveDirection::Right:
         currentAnimationPosition = 0;
         break;
     default:
@@ -109,9 +79,9 @@ void Ghosts::UpdateAnimation(float deltaTime)
         }
     }
     else {
-        // Force to a single frame (e.g., first frame of frightened texture)
+        //forcing to only one single frame for the frightened
         currentFrame = 0;
-        currentAnimationPosition = 0; // assuming frightened.png has only one frame in the first slot
+        currentAnimationPosition = 0;
     }
 
     int animationIndex = currentFrame + currentAnimationPosition;
@@ -123,6 +93,7 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
     // update the timer of the ghost
     modeTimer.Update(deltaTime);
     // Check the mode timer and adjust the mode if necessary
+    // When the timer runs out, the mode changes depending on the setMode()
     if (modeTimer.Time() < 0.f) {
         switch (mode)
         {
@@ -141,28 +112,46 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
         }
     }
 
+    // Gets the specific position that each ghost should target. It's overritten by every type of ghost
     sf::Vector2f targetPosition = getTargetPosition(pacmanPos);
 
     if (MoveTo(deltaTime)) {
         currentTile = WrapCoords(nextTile);
 
         //choosing direction toward Pacman
-        float bestDist = mode == GhostMode::Chase || mode == GhostMode::Scatter ? std::numeric_limits<float>::max() : std::numeric_limits<float>::min();
-        Direction bestDir = Direction::None;
-        for (auto dir : { Direction::Up, Direction::Down, Direction::Left, Direction::Right }) {
+        float bestDist = 0.f;
+
+        if (mode == GhostMode::Chase || mode == GhostMode::Scatter) {
+            // We are searching for the Minimum element, thats why we set the current best distance to +infinity
+            bestDist = std::numeric_limits<float>::max();
+        }
+        else {
+            // We are searching for the Maximum element, thats why we set the current best distance to -infinity
+            bestDist = std::numeric_limits<float>::min();
+        }
+        MoveDirection bestDir = MoveDirection::None;
+
+        // We loop through each directions to decide which one is best
+        for (auto dir : { MoveDirection::Up, MoveDirection::Down, MoveDirection::Left, MoveDirection::Right }) {
+            // Gets the next tile based on the chosen direction
             sf::Vector2f next = currentTile + GetNextTile(dir);
-            if (mode == GhostMode::Chase || mode == GhostMode::Scatter) {
-                if (CanMoveTo(next) && dir != OppositeDirection(currentMoveDirection)) {
-                    float dist = std::abs(next.x - targetPosition.x) + std::abs(next.y - targetPosition.y);
+
+            if (CanMoveTo(next) && dir != OppositeDirection(currentMoveDirection)) {
+                // Manhattan distance
+                 float dist = std::abs(next.x - targetPosition.x) + std::abs(next.y - targetPosition.y);
+
+                //// Eucledian distance
+                //float x_pow = std::powf(next.x - targetPosition.x, 2);
+                //float y_pow = std::powf(next.y - targetPosition.y, 2);
+                //float dist = std::sqrtf(x_pow + y_pow);
+
+                if (mode == GhostMode::Chase || mode == GhostMode::Scatter) {
                     if (dist < bestDist) {
                         bestDist = dist;
                         bestDir = dir;
                     }
                 }
-            }
-            else {
-                if (CanMoveTo(next) && dir != OppositeDirection(currentMoveDirection)) {
-                    float dist = std::abs(next.x - targetPosition.x) + std::abs(next.y - targetPosition.y);
+                else {
                     if (dist > bestDist) {
                         bestDist = dist;
                         bestDir = dir;
@@ -172,19 +161,25 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
 
         }
 
-
-        if (bestDir != Direction::None) {
+        if (bestDir != MoveDirection::None) {
             nextTile = currentTile + GetNextTile(bestDir);
             currentMoveDirection = bestDir;
         }
         else {
             nextTile = currentTile; // Stay put
-            currentMoveDirection = Direction::None;
+            currentMoveDirection = MoveDirection::None;
         }
 
-        interpolationTime = std::abs(nextTile.x - currentTile.x) + std::abs(nextTile.y - currentTile.y) > 0
-            ? blockSize / moveSpeed
-            : 0.0f;
+        if (std::abs(nextTile.x - currentTile.x) + std::abs(nextTile.y - currentTile.y) > 0)
+        {
+            interpolationTime = blockSize / moveSpeed;
+        }
+        else
+        {
+            interpolationTime = 0.0f;
+        }
+
+        //we reset it after the loop again
         interpolationTimer = 0.0f;
     }
 
@@ -199,9 +194,11 @@ void Ghosts::MapSearch()
         {
             if (maze[i][j] == mapSymbol)
             {
+                //we calculate the x and y corresponding to the map position
                 float x = static_cast<float>(j * blockSize);
                 float y = static_cast<float>(i * blockSize);
 
+                //at first we set the equal as default
                 currentTile = nextTile = sf::Vector2f{ x, y };
 
                 ghostSprite.setPosition(currentTile);
