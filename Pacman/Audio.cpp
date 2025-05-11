@@ -3,7 +3,7 @@
 Audio::Audio() :
     winBuffer("audio/pacman_win.ogg"), deathBuffer("audio/pacman_death.wav"),
     foodBuffer("audio/pacman_chomp.wav"), ghostBuffer("audio/pacman_eatghost.wav"),
-    startBuffer("audio/pacman_beginning.wav"), blueGhostBuffer("audio/ghosts_turning_blue.flac"),
+    startBuffer("audio/pacman_beginning.wav"), blueGhostBuffer("audio/ghosts_turning_blue.ogg"),
     resetDieBuffer("audio/reset_after_death.flac"), winSound(winBuffer), deathSound(deathBuffer), foodSound(foodBuffer),
     ghostSound(ghostBuffer), startSound(startBuffer), blueGhostSound(blueGhostBuffer), resetDieSound(resetDieBuffer)
 {
