@@ -16,6 +16,12 @@ enum class LoadAudio
 
 class Audio
 {
+public:
+    void UpdateSound(LoadAudio audio);
+    void Reset();
+    void StopBlueGhostSound();
+    Audio();
+
 private:
     sf::SoundBuffer winBuffer;
     sf::SoundBuffer deathBuffer;
@@ -32,10 +38,4 @@ private:
     sf::Sound startSound;
     sf::Sound blueGhostSound;
     sf::Sound resetDieSound;
-
-public:
-    void UpdateSound(LoadAudio audio);
-    void Reset();
-    void StopBlueGhostSound();
-    Audio();
 };

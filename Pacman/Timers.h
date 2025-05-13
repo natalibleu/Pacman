@@ -3,18 +3,17 @@
 
 class Timers
 {
+public:
+	Timers(float duration);
+	void SetDuration(float duration);
+	void Start();
+	void Update(float deltaTime);
+	float Time();
+
 private:
 	sf::Clock clock;
 	float duration = 0.f;
 	float timeLeft = 0.f;
 	bool running = false;
-
-public:
-	Timers(float _duration);
-	void SetDuration(float _duration);
-	void Start();
-	void Update(float deltaTime);
-	float Time();
-
 };
 

@@ -6,14 +6,6 @@
 
 class Lives
 {
-private:
-    sf::Texture livesTexture;
-    sf::Sprite livesSprite;
-
-    Audio audio;
-
-    int lives = 3;
-
 public:
     Lives();
     bool IsColliding(sf::FloatRect& pacman, sf::FloatRect& ghost);
@@ -22,4 +14,13 @@ public:
     int GetLives() { return lives; }
     void Reset();
     void Draw(sf::RenderWindow& window);
+
+private:
+    sf::Texture livesTexture;
+    sf::Sprite livesSprite;
+
+    Audio audio;
+
+    int lives = 3;
+
 };

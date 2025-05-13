@@ -39,7 +39,6 @@ void Game::Draw(sf::RenderWindow& window)
 
 void Game::Update(sf::Time& elapsedTime)
 {
-
     if (isRunning)
     {
         //Only updating movement if game is running

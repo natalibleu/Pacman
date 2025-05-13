@@ -1,13 +1,13 @@
 #include "Timers.h"
 
-Timers::Timers(float _duration)
+Timers::Timers(float duration)
 {
-	duration = _duration;
+	this->duration = duration;
 }
 
-void Timers::SetDuration(float _duration)
+void Timers::SetDuration(float duration)
 {
-	duration = _duration;
+	this->duration = duration;
 }
 
 // Resets the timer and starts it

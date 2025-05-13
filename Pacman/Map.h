@@ -31,11 +31,12 @@ const char mazeLayout[rows][columns] = { // P is Pacman's spawn point; 123 is ea
 };
 
 class Map {
-private:
-	sf::Texture texture;
-	sf::Sprite wallSprite;
 public:
 	Map();
 	void DrawMap(unsigned int x, unsigned int y, sf::RenderWindow& window);
 	void Reset();
+
+private:
+	sf::Texture texture;
+	sf::Sprite wallSprite;
 };
