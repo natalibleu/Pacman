@@ -6,20 +6,39 @@ Game::Game()
     pacman.SetGhosts(blinky, pinky, inky, clyde);
 }
 
-void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
+void Game::Draw(sf::RenderWindow& window)
 {
     window.clear();
+
     map.DrawMap(0, 0, window);
+    score.Draw(window);
+    lives.Draw(window);
     pellet.DrawPellets(window);
     energizer.DrawEnergizer(window);
     blinky.Draw(window);
     pinky.Draw(window);
     inky.Draw(window);
     clyde.Draw(window);
+
     if (showText)
     {
         text.StartGame(window);
     }
+    else if (gameWon)
+    {
+        text.WinningText(window);
+    }
+    else if (killed)
+    {
+        text.LosingText(window);
+    }
+
+    pacman.DrawPacman(window);
+    window.display();
+}
+
+void Game::Update(sf::Time& elapsedTime)
+{
 
     if (isRunning)
     {
@@ -30,25 +49,23 @@ void Game::Update(sf::RenderWindow& window, sf::Time& elapsedTime)
         clyde.Move(elapsedTime.asSeconds(), clyde.getTargetPosition(pacman.GetPosition()));
         inky.Move(elapsedTime.asSeconds(), inky.getTargetPosition(pacman.GetPosition()));
 
-        score.UpdateScore(window);
-        lives.CheckCollision(window, pacman, audio, blinky, pinky, inky, clyde);
+        score.UpdateScore();
+
+        lives.CheckCollision(pacman, audio, blinky, pinky, inky, clyde);
+
         CheckLives();
-        CheckWin(elapsedTime, window);
+
+        CheckWin();
     }
     else if (gameWon)
     {
         //just load the ending animation and freeze all game updates
         pacman.EndingAnimation(elapsedTime.asSeconds());
-        text.WinningText(window);
     }
     else if (killed)
     {
         pacman.EndingAnimation(elapsedTime.asSeconds());
-        text.LosingText(window);
     }
-
-    pacman.DrawPacman(window);
-    window.display();
 }
 
 void Game::Reset()
@@ -69,9 +86,6 @@ void Game::Reset()
     gameWon = false;
     showText = false;
 
-    pacman.eatenPellets = 0;
-    pacman.eatenEnergizers = 0;
-
     map.Reset();
 }
 
@@ -85,7 +99,7 @@ void Game::CheckLives()
     }
 }
 
-void Game::CheckWin(sf::Time& elapsedTime, sf::RenderWindow& window)
+void Game::CheckWin()
 {
     if (pacman.eatenPellets + pacman.eatenEnergizers >= 150)
     {

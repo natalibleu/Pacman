@@ -12,6 +12,7 @@ private:
 public:
 	Score();
 
-	void UpdateScore(sf::RenderWindow& window);
+	void UpdateScore();
 	void Reset();
+	void Draw(sf::RenderWindow& window);
 };

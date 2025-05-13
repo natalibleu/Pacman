@@ -15,8 +15,6 @@ enum class GhostMode
 class Ghosts
 {
 private:
-    //sf::Texture frightenedTexture;
-    //sf::Sprite frightenedSprite;
 
     // Ghost's current direction.
     MoveDirection currentMoveDirection = MoveDirection::None;

@@ -38,8 +38,9 @@ public:
     bool isRunning = false;
     bool showText = true;
     Game();
-    void Update(sf::RenderWindow& window, sf::Time& elapsedTime);
+    void Draw(sf::RenderWindow& window);
+    void Update(sf::Time& elapsedTime);
     void Reset();
     void CheckLives();
-    void CheckWin(sf::Time& elapsedTime, sf::RenderWindow& window);
+    void CheckWin();
 };

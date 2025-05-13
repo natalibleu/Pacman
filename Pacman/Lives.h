@@ -17,8 +17,9 @@ private:
 public:
     Lives();
     bool IsColliding(sf::FloatRect& pacman, sf::FloatRect& ghost);
-    void CheckCollision(sf::RenderWindow& window, Pacman& pacman, Audio& audio, Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
+    void CheckCollision(Pacman& pacman, Audio& audio, Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
     void CheckGhost(Pacman& pacman, Ghosts& ghost, Audio& audio);
     int GetLives() { return lives; }
     void Reset();
+    void Draw(sf::RenderWindow& window);
 };

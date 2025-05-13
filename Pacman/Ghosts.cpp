@@ -138,7 +138,7 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
 
             if (CanMoveTo(next) && dir != OppositeDirection(currentMoveDirection)) {
                 // Manhattan distance
-                 float dist = std::abs(next.x - targetPosition.x) + std::abs(next.y - targetPosition.y);
+                float dist = std::abs(next.x - targetPosition.x) + std::abs(next.y - targetPosition.y);
 
                 //// Eucledian distance
                 //float x_pow = std::powf(next.x - targetPosition.x, 2);

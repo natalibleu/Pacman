@@ -4,7 +4,7 @@
 int main()
 {
     //creating a window
-    sf::RenderWindow window(sf::VideoMode({ 672,672 }), "Pacman");
+    sf::RenderWindow window(sf::VideoMode({672,672 }), "Pacman");
 
     sf::Clock clock;
     sf::Music music;
@@ -38,6 +38,7 @@ int main()
 
         sf::Time elapsedTime = clock.restart();
 
-        game.Update(window, elapsedTime);
+        game.Draw(window);
+        game.Update(elapsedTime);
     }
 }

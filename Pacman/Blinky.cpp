@@ -4,7 +4,6 @@
 
 Blinky::Blinky() : Ghosts("assets/blinky1.png", '0')
 {
-
 }
 
 sf::Vector2f Blinky::getTargetPosition(const sf::Vector2f& pacmanPos)

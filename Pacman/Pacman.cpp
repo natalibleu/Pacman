@@ -230,6 +230,9 @@ void Pacman::Reset()
     currentFrame = 0;
     animationTimer = 0;
 
+    eatenPellets = 0;
+    eatenEnergizers = 0;
+
     won = false;
 
     pacmanTexture = defaultTexture;
