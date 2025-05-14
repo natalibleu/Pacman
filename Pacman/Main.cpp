@@ -31,14 +31,13 @@ int main()
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
         {
-
             game.isRunning = true;
             game.showText = false;
         }
 
         sf::Time elapsedTime = clock.restart();
 
-        game.Draw(window);
         game.Update(elapsedTime);
+        game.Draw(window);
     }
 }

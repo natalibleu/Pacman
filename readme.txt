@@ -12,8 +12,12 @@ Retro Games Mechanisms Explained: ghosts logic - https://youtu.be/ataGotQ7ir8?si
 jpvanoosten: helped with pacman movement
 
 3. Used resourcess for the project
+
+*Sprites:
 Pacman Sprite: Kofybrek - https://github.com/Kofybrek/Pacman
 Ghosts Sprite: King Trophy22 - https://www.deviantart.com/kingtrophy22/art/Pac-Man-1980-Ghosts-sprites-1119200936
+
+*Fonts:
 Text font: Emulogic - https://www.fontspace.com/category/pacman
 
 *Sound Effects:
