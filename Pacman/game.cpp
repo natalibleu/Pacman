@@ -56,13 +56,9 @@ void Game::Update(sf::Time& elapsedTime)
 
         CheckLives();
     }
-    else if (gameWon)
+    else if (gameWon || killed)
     {
         //just load the ending animation and freeze all game updates
-        pacman.EndingAnimation(elapsedTime.asSeconds());
-    }
-    else if (killed)
-    {
         pacman.EndingAnimation(elapsedTime.asSeconds());
     }
 }
