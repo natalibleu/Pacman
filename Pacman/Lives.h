@@ -22,5 +22,4 @@ private:
     Audio audio;
 
     int lives = 3;
-
 };

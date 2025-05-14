@@ -52,9 +52,9 @@ void Game::Update(sf::Time& elapsedTime)
 
         lives.CheckCollision(pacman, audio, blinky, pinky, inky, clyde);
 
-        CheckLives();
-
         CheckWin();
+
+        CheckLives();
     }
     else if (gameWon)
     {
@@ -84,6 +84,9 @@ void Game::Reset()
     killed = false;
     gameWon = false;
     showText = false;
+
+    pacman.eatenEnergizers = 0;
+    pacman.eatenPellets = 0;
 
     map.Reset();
 }

@@ -213,11 +213,6 @@ bool Pacman::Move(float deltaTime)
     return true;
 }
 
-sf::Vector2f Pacman::GetPosition()
-{
-    return pacmanSprite.getPosition();
-}
-
 Pacman::Pacman() : defaultTexture("assets/Pacman.png"), pacmanSprite(pacmanTexture, sf::IntRect{ {0,0}, {32,32} })
 {
     Reset();
@@ -229,9 +224,6 @@ void Pacman::Reset()
     nextMoveDirection = MoveDirection::None;
     currentFrame = 0;
     animationTimer = 0;
-
-    eatenPellets = 0;
-    eatenEnergizers = 0;
 
     won = false;
 

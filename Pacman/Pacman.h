@@ -17,7 +17,7 @@ public:
     bool HasEatenEnergizer(sf::Vector2f p);
     void EatGhost(Ghosts* ghost);
     bool Move(float deltaTime);
-    sf::Vector2f GetPosition();
+    sf::Vector2f GetPosition() { return pacmanSprite.getPosition(); }
     sf::Sprite GetSprite() { return pacmanSprite; }
     void DrawPacman(sf::RenderWindow& window);
     void Reset();
