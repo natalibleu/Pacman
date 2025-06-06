@@ -6,9 +6,6 @@
 class Pacman
 {
 public:
-    int eatenPellets = 0;
-    int eatenEnergizers = 0;
-
     void SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde);
     void EatFruits(sf::Vector2f p);
     bool HasEatenFruit(sf::Vector2f p);
@@ -22,6 +19,8 @@ public:
     void DrawPacman(sf::RenderWindow& window);
     void Reset();
     void ResetGhosts();
+    int GetEatenFood();
+    void ResetFoodCount();
     Pacman();
 
 private:
@@ -50,6 +49,9 @@ private:
     float animationTimer = 0.0f;
     float animationEndTime = 0.1f; // seconds per frame
     int currentFrame = 0;
+
+    int eatenPellets = 0;
+    int eatenEnergizers = 0;
 
     Ghosts* ghosts[4];
 

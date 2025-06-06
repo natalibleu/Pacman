@@ -19,7 +19,7 @@ bool Lives::IsColliding(sf::FloatRect& pacman, sf::FloatRect& ghost)
     sf::Vector2f ghostCenter = ghost.getCenter();
     sf::Vector2f pacmanCenter = pacman.getCenter();
 
-    if (between(pacmanCenter.x, ghostCenter.x - 8, ghostCenter.x + 8) && between(pacmanCenter.y, ghostCenter.y - 8, ghostCenter.y + 8))
+    if (between(pacmanCenter.x, ghostCenter.x - 8, ghostCenter.x + 8) && between(pacmanCenter.y, ghostCenter.y - 8, ghostCenter.y + 8)) 
     {
         return true;
     }
@@ -38,6 +38,7 @@ void Lives::CheckGhost(Pacman& pacman, Ghosts& ghost, Audio& audio)
 {
     auto pacBounds = pacman.GetSprite().getGlobalBounds();
     auto ghostBounds = ghost.GetSprite().getGlobalBounds();
+
     if (IsColliding(pacBounds, ghostBounds))
     {
         if (ghost.GetMode() == GhostMode::Frightened)

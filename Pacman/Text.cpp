@@ -29,11 +29,11 @@ void Text::LosingText(sf::RenderWindow& window)
     std::string losing_text = "      ! YOU LOST !\n";
     text.setString(losing_text + reset_text);
     text.setCharacterSize(18);
-    auto center = text.getGlobalBounds().size / 2.f;
-    auto localBounds = center + text.getLocalBounds().position;
-    auto rounded = round(localBounds);
-    text.setOrigin(rounded);
-    text.setPosition(sf::Vector2f{ window.getSize() / 2u });
+    auto center = text.getGlobalBounds().size / 2.f; //getting the height and width from the text and dividing by 2 to get the center
+    auto localBounds = center + text.getLocalBounds().position; //getting the actual visual center of the text
+    auto rounded = round(localBounds); //round the pixels and helps with perfect alignment
+    text.setOrigin(rounded); //sets the origin to the center of the text and not by default at the (0,0)
+    text.setPosition(sf::Vector2f{ window.getSize() / 2u }); //this sets the text at the wished position - center of the game window 
     window.draw(text);
 }
 

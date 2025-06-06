@@ -16,25 +16,27 @@ enum class MoveDirection
     Right
 };
 
-static sf::Vector2f WrapCoords(const sf::Vector2f& p)
+static sf::Vector2f WrapCoords(const sf::Vector2f& p) //ensures the entity stays within the screen
 {
     float sw = static_cast<float>(screenWidth);
     float sh = static_cast<float>(screenHeight);
 
-    return { std::fmod(p.x + sw, sw), std::fmod(p.y + sh, sh) };
+    //modulus division between two numbers: the position after adding the sw/sh and sw/sh themselves
+    return { std::fmod(p.x + sw, sw), std::fmod(p.y + sh, sh) }; //returns the pixel position of the entity
 }
 
 static sf::Vector2i ConvertCoordinates(sf::Vector2f p)
 {
     p = WrapCoords(p);
 
+    //gets the result from the WrapCoords and converts it in map blocks
     int c = static_cast<int>(p.x) / blockSize;
     int r = static_cast<int>(p.y) / blockSize;
 
     return sf::Vector2i{ r,c };
 }
 
-static sf::Vector2f GetNextTile(MoveDirection dir)
+static sf::Vector2f GetNextTile(MoveDirection dir) //gives the offset for that direction the "dir" is set up to
 {
     switch (dir)
     {

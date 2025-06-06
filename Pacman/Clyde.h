@@ -4,7 +4,7 @@
 class Clyde : public Ghosts
 {
 public:
-	void GetBlinkyPos(sf::Vector2f newBlinkyPos);
+	void GetBlinkyPos(sf::Vector2f& blinkyPos);
 	sf::Vector2f getTargetPosition(const sf::Vector2f& pacmanPos) override; //overriding
 	Clyde();
 

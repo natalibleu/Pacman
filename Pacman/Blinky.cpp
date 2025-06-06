@@ -2,7 +2,7 @@
 #include "Pacman.h"
 #include "Constants.h"
 
-Blinky::Blinky() : Ghosts("assets/blinky1.png", '0')
+Blinky::Blinky() : Ghosts("assets/blinky1.png", '0')  //Blinky is a derived class that inherits from Ghosts, and we’re initializing the base Ghost class with those specific values.
 {
 }
 

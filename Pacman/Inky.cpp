@@ -8,7 +8,6 @@ bool Inky::Scatter()
 
 sf::Vector2f Inky::getTargetPosition(const sf::Vector2f& pacmanPos)
 {
-
 	//calculating the corresponding corner position to each ghost
 	sf::Vector2f cornerPosition = sf::Vector2f{ static_cast<float>(screenHeight), static_cast<float>(screenHeight) };
 
@@ -34,7 +33,7 @@ sf::Vector2f Inky::getTargetPosition(const sf::Vector2f& pacmanPos)
 	else if (distanceCorner < 4 * blockSize)
 	{
 		localScatterMode = false;
-		setMode(GhostMode::Chase);
+		SetMode(GhostMode::Chase);
 	}
 
 	//depending on the different condition, we return the associative target

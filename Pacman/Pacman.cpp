@@ -4,6 +4,7 @@
 #include "Score.h"
 #include "Timers.h"
 
+//giving Pacman access to the ghost instances that exist in the game
 void Pacman::SetGhosts(Ghosts& blinky, Ghosts& pinky, Ghosts& inky, Ghosts& clyde)
 {
     ghosts[0] = &blinky;
@@ -42,7 +43,7 @@ void Pacman::EatEnergizer(sf::Vector2f p)
 
     for (int i = 0; i < 4; i++)
     {
-        ghosts[i]->setMode(GhostMode::Frightened);
+        ghosts[i]->SetMode(GhostMode::Frightened);
     }
 }
 
@@ -80,7 +81,7 @@ bool CanMove(sf::Vector2f p)
 {
     sf::Vector2i indexes = ConvertCoordinates(p);
 
-    // Grid cells with a # are walls.
+    // Grid cells with a # are walls and the = is the ghosts' maze door
     return maze[indexes.x][indexes.y] != '#' && maze[indexes.x][indexes.y] != '=';
 }
 
@@ -137,7 +138,7 @@ void Pacman::EndingAnimation(float deltaTime)
     }
 
     animationTimer += deltaTime; // we increase the value of the timer with deltaTime step
-    currentFrame = animationTimer * 10;
+    currentFrame = animationTimer * 10; //change frame for every 0.1;
 
     if (currentFrame > 11)
     {
@@ -149,7 +150,7 @@ void Pacman::EndingAnimation(float deltaTime)
 
 bool Pacman::MoveTo(float deltaTime)
 {
-    interpolationTimer += deltaTime; //to track progress of interpolation time
+    interpolationTimer += deltaTime; 
 
     if (interpolationTime > 0.0f)
     {
@@ -162,7 +163,7 @@ bool Pacman::MoveTo(float deltaTime)
 
 bool Pacman::Move(float deltaTime)
 {
-    // Update pacman's next move direction.
+    // Update pacman's next move direction. Saves the picked direction for the time when it can be used and isn't blocked
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
         nextMoveDirection = MoveDirection::Up;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
@@ -190,7 +191,7 @@ bool Pacman::Move(float deltaTime)
             EatEnergizer(currentTile);
         }
 
-        // if we can go to the nextMoveDirection we go there
+        // if we can go to the nextMoveDirection, we go there
         if (CanMove(currentTile + GetNextTile(nextMoveDirection))) // Checks if we can move to the next tile, which is calculated by (currentTile + (Direction in which we are going))
         {
             nextTile = currentTile + GetNextTile(nextMoveDirection);
@@ -253,4 +254,15 @@ void Pacman::ResetGhosts()
     for (int i = 0; i < 4; i++) {
         ghosts[i]->ResetGhost();
     }
+}
+
+void Pacman::ResetFoodCount()
+{
+    eatenEnergizers = 0;
+    eatenPellets = 0;
+}
+
+int Pacman::GetEatenFood()
+{
+    return eatenPellets + eatenEnergizers;
 }

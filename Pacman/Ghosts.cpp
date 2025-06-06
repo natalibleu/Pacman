@@ -9,18 +9,17 @@ bool CanMoveTo(sf::Vector2f p)
     return maze[indexes.x][indexes.y] != '#';
 }
 
-void Ghosts::setMode(GhostMode newMode)
+void Ghosts::SetMode(GhostMode mode)
 {
-    // Change the mode of the ghost
-    mode = newMode;
-    // Reset the timer
+    this->mode = mode;
+    //start the timer
     modeTimer.Start();
     // if we are in frightened mode, change the sprite
     if (mode == GhostMode::Frightened) {
         ghostSprite.setTexture(frightenedTexture);
         audio.UpdateSound(LoadAudio::BlueGhosts);
     }
-    // else, we set it to default
+    // else, we set it to the default ghost texture
     else {
         audio.StopBlueGhostSound();
         ghostSprite.setTexture(ghostTexture);
@@ -29,22 +28,25 @@ void Ghosts::setMode(GhostMode newMode)
 
 void Ghosts::ResetGhost()
 {
-    setMode(GhostMode::Chase);
+    SetMode(GhostMode::Chase);
     MapSearch();
 }
 
 
-bool Ghosts::MoveTo(float deltaTime)
+bool Ghosts::MoveTo(float deltaTime) //smoothly moving the ghost: lerp
 {
-    interpolationTimer += deltaTime;
+    //starting the timer; deltaTime is the time that passed since the last frame
+    interpolationTimer += deltaTime; //interpolationTimer keeps track of how far along we are in moving from one tile to the next.
 
     if (interpolationTime > 0.0f)
     {
-        float t = std::min(1.0f, interpolationTimer / interpolationTime);
-        sf::Vector2f newPosition = currentTile + t * (nextTile - currentTile);
+        //calculate how far along we are in the interpolation from 0.0 (just started) to 1.0 (finished).
+        float t = std::min(1.0f, interpolationTimer / interpolationTime); //min ensures we never go above 1.0, even if interpolationTimer slightly overshoots.
+
+        sf::Vector2f newPosition = currentTile + t * (nextTile - currentTile); //lerp
         ghostSprite.setPosition(WrapCoords(newPosition));
     }
-    return interpolationTimer >= interpolationTime;
+    return interpolationTimer >= interpolationTime; //returns true if we already passed the block and returns false if we're still moving in the same block
 }
 
 void Ghosts::UpdateAnimation(float deltaTime)
@@ -91,23 +93,23 @@ void Ghosts::UpdateAnimation(float deltaTime)
 void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vector2f& ghostPos)
 {
     // update the timer of the ghost
-    modeTimer.Update(deltaTime);
+    modeTimer.Update(deltaTime); //timer decreases with each frame, based on deltaTime
     // Check the mode timer and adjust the mode if necessary
-    // When the timer runs out, the mode changes depending on the setMode()
+    // When the timer runs out, the mode changes depending on the SetMode()
     if (modeTimer.Time() < 0.f) {
         switch (mode)
         {
         case GhostMode::Scatter:
-            setMode(GhostMode::Chase);
+            SetMode(GhostMode::Chase);
             break;
         case GhostMode::Chase:
-            setMode(GhostMode::Scatter);
+            SetMode(GhostMode::Scatter);
             break;
         case GhostMode::Frightened:
-            setMode(GhostMode::Chase);
+            SetMode(GhostMode::Chase);
             break;
         default:
-            setMode(GhostMode::Chase);
+            SetMode(GhostMode::Chase);
             break;
         }
     }
@@ -116,7 +118,7 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
     sf::Vector2f targetPosition = getTargetPosition(pacmanPos);
 
     if (MoveTo(deltaTime)) {
-        currentTile = WrapCoords(nextTile);
+        currentTile = WrapCoords(nextTile);//updates the new position in the map cell
 
         //choosing direction toward Pacman
         float bestDist = 0.f;
@@ -131,10 +133,10 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
         }
         MoveDirection bestDir = MoveDirection::None;
 
-        // We loop through each directions to decide which one is best
+        // We loop through each directions to decide which one is the best
         for (auto dir : { MoveDirection::Up, MoveDirection::Down, MoveDirection::Left, MoveDirection::Right }) {
             // Gets the next tile based on the chosen direction
-            sf::Vector2f next = currentTile + GetNextTile(dir);
+            sf::Vector2f next = currentTile + GetNextTile(dir); //getting the coordinates of the tile the ghost would move to if it went in that direction.
 
             if (CanMoveTo(next) && dir != OppositeDirection(currentMoveDirection)) {
 
@@ -146,14 +148,18 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
                 //float y_pow = std::powf(next.y - targetPosition.y, 2);
                 //float dist = std::sqrtf(x_pow + y_pow);
 
-                if (mode == GhostMode::Chase || mode == GhostMode::Scatter) {
-                    if (dist < bestDist) {
+                if (mode == GhostMode::Chase || mode == GhostMode::Scatter) 
+                {
+                    if (dist < bestDist)  //choose the shortest distance.
+                    {
                         bestDist = dist;
                         bestDir = dir;
                     }
                 }
-                else {
-                    if (dist > bestDist) {
+                else 
+                {
+                    if (dist > bestDist) //choose the longest distance.
+                    {
                         bestDist = dist;
                         bestDir = dir;
                     }
@@ -167,13 +173,14 @@ void Ghosts::Move(float deltaTime, const sf::Vector2f& pacmanPos, const sf::Vect
             currentMoveDirection = bestDir;
         }
         else {
-            nextTile = currentTile; // Stay put
+            nextTile = currentTile; //staying put
             currentMoveDirection = MoveDirection::None;
         }
 
+        //if I want to make changes with how the distance is calculated, I should change this too
         if (std::abs(nextTile.x - currentTile.x) + std::abs(nextTile.y - currentTile.y) > 0)
         {
-            interpolationTime = blockSize / moveSpeed;
+            interpolationTime = blockSize / moveSpeed; //calculating how long the movement between tiles should take.
         }
         else
         {

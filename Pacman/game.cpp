@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include <iostream>
 
 Game::Game()
 {
@@ -10,7 +11,7 @@ void Game::Draw(sf::RenderWindow& window)
 {
     window.clear();
 
-    map.DrawMap(0, 0, window);
+    map.DrawMap(window);
     score.Draw(window);
     lives.Draw(window);
     pellet.DrawPellets(window);
@@ -52,6 +53,7 @@ void Game::Update(sf::Time& elapsedTime)
 
         lives.CheckCollision(pacman, audio, blinky, pinky, inky, clyde);
 
+        std::cout << "Eaten food: " << pacman.GetEatenFood() << std::endl;
         CheckWin();
 
         CheckLives();
@@ -73,6 +75,7 @@ void Game::Reset()
     pacman.Reset();
     score.Reset();
     lives.Reset();
+    pacman.ResetFoodCount();
 
     audio.Reset();
 
@@ -80,9 +83,6 @@ void Game::Reset()
     killed = false;
     gameWon = false;
     showText = false;
-
-    pacman.eatenEnergizers = 0;
-    pacman.eatenPellets = 0;
 
     map.Reset();
 }
@@ -99,7 +99,7 @@ void Game::CheckLives()
 
 void Game::CheckWin()
 {
-    if (pacman.eatenPellets + pacman.eatenEnergizers >= 150)
+    if (pacman.GetEatenFood() >= 150)
     {
         isRunning = false;
         gameWon = true;

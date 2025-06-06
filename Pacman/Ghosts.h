@@ -24,7 +24,7 @@ public:
     sf::Vector2f GetPosition() const; // Returns ghost position in pixels
     GhostMode GetMode() { return mode; }
     sf::Sprite GetSprite() { return ghostSprite; }
-    void setMode(GhostMode newMode);
+    void SetMode(GhostMode mode);
     void ResetGhost();
 
 protected:
@@ -32,6 +32,7 @@ protected:
     sf::Sprite ghostSprite;
 
     char mapSymbol;
+    float moveSpeed = 150.0f;
 
     sf::Texture frightenedTexture;
 
@@ -53,9 +54,8 @@ private:
 
     Audio audio;
 
-    float interpolationTime = 0.0f;
-    float interpolationTimer = 0.0f;
-    float moveSpeed = 150.0f;
+    float interpolationTime = 0.0f; //the total time it should take to move from currentTile to nextTile
+    float interpolationTimer = 0.0f; //how much time has passed since the movement began
 
     float animationTimer = 0.0f;
     float animationEndTime = 0.1f; // Animation frame duration

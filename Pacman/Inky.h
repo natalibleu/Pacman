@@ -10,6 +10,5 @@ public:
 
 private:
 	bool localScatterMode = false;
-
 };
 

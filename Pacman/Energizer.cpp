@@ -10,6 +10,8 @@ void Energizer::DrawEnergizer(sf::RenderWindow& window)
 		{
 			if (maze[i][j] == 'o')
 			{
+
+				//depending on the j and i we calculate the pixel coordinates the sprite should be in
 				float x = static_cast<float>(j * blockSize);
 				float y = static_cast<float>(i * blockSize);
 

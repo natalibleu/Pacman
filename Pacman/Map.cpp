@@ -5,7 +5,7 @@
 
 char maze[rows][columns];
 
-void Map::DrawMap(unsigned int x, unsigned int y, sf::RenderWindow& window)
+void Map::DrawMap(sf::RenderWindow& window)
 {
 	//drawing map for each #
 	for (int i = 0; i < rows; i++)
@@ -14,8 +14,8 @@ void Map::DrawMap(unsigned int x, unsigned int y, sf::RenderWindow& window)
 		{
 			if (maze[i][j] == '#')
 			{
-				wallSprite.setPosition(sf::Vector2f(static_cast<float>(x + j * texture.getSize().x),
-					static_cast<float>(y + i * texture.getSize().y)));
+				wallSprite.setPosition(sf::Vector2f(static_cast<float>(j * texture.getSize().x),
+					static_cast<float>(i * texture.getSize().y)));
 				window.draw(wallSprite);
 			}
 		}
